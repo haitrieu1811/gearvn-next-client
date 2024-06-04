@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Chivo as FontSans } from 'next/font/google'
+import NextTopLoader from 'nextjs-toploader'
 
 import { cn } from '@/lib/utils'
 import TanstackProvider from '@/providers/tanstack.provider'
@@ -26,7 +27,10 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning>
       <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
-          <TanstackProvider>{children}</TanstackProvider>
+          <TanstackProvider>
+            <NextTopLoader showSpinner={false} color='red' height={2} />
+            {children}
+          </TanstackProvider>
         </ThemeProvider>
       </body>
     </html>
