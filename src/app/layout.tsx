@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Chivo as FontSans } from 'next/font/google'
 
 import { cn } from '@/lib/utils'
+import TanstackProvider from '@/providers/tanstack.provider'
 import { ThemeProvider } from '@/providers/theme.provider'
 import './globals.css'
 
@@ -22,10 +23,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='en'>
+    <html lang='en' suppressHydrationWarning>
       <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
-          {children}
+          <TanstackProvider>{children}</TanstackProvider>
         </ThemeProvider>
       </body>
     </html>
