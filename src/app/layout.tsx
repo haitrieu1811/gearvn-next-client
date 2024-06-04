@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Chivo as FontSans } from 'next/font/google'
+import { Inter_Tight as FontSans } from 'next/font/google'
 import NextTopLoader from 'nextjs-toploader'
 
 import { cn } from '@/lib/utils'

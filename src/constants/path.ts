@@ -2,7 +2,9 @@ const PATH = {
   HOME: '/',
   LOGIN: '/login',
   REGISTER: '/register',
+  CART: '/cart',
   ACCOUNT: '/account',
+  ACCOUNT_ORDER: '/account/order',
 
   ADMIN: '/admin',
   ADMIN_USER: '/admin/user',
