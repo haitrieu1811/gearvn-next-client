@@ -1,9 +1,29 @@
 import axios, { AxiosInstance } from 'axios'
 
+import { LOGIN_URL } from '@/apis/users.apis'
+import {
+  getAccessTokenFromLS,
+  getLoggedUserFromLS,
+  getRefreshTokenFromLS,
+  setAccessTokenToLS,
+  setLoggedUserToLS,
+  setRefreshTokenToLS
+} from '@/lib/auth'
+import { LoggedUser } from '@/types/users.types'
+import { AuthResponse } from '@/types/utils.types'
+
 class Http {
   instance: AxiosInstance
+  private accessToken: string | null
+  private refreshToken: string | null
+  private loggedUser: LoggedUser | null
+  private refreshTokenRequest: Promise<string> | null
 
   constructor() {
+    this.accessToken = getAccessTokenFromLS()
+    this.refreshToken = getRefreshTokenFromLS()
+    this.loggedUser = getLoggedUserFromLS()
+    this.refreshTokenRequest = null
     this.instance = axios.create({
       baseURL: process.env.NEXT_PUBLIC_SERVER_BASE_URL,
       timeout: 10000,
@@ -12,28 +32,39 @@ class Http {
       }
     })
 
-    // Add a request interceptor
     this.instance.interceptors.request.use(
-      function (config) {
-        // Do something before request is sent
+      (config) => {
+        if (this.accessToken) {
+          config.headers.Authorization = `Bearer ${this.accessToken}`
+        }
         return config
       },
-      function (error) {
-        // Do something with request error
+      (error) => {
         return Promise.reject(error)
       }
     )
 
-    // Add a response interceptor
     this.instance.interceptors.response.use(
-      function (response) {
-        // Any status code that lie within the range of 2xx cause this function to trigger
-        // Do something with response data
+      (response) => {
+        const { url, method } = response.config
+        if (url && method && [LOGIN_URL].includes(url) && ['patch', 'post'].includes(method)) {
+          const { accessToken, refreshToken, user } = (response.data as AuthResponse).data
+          this.accessToken = accessToken
+          this.refreshToken = refreshToken
+          this.loggedUser = user
+          setAccessTokenToLS(accessToken)
+          setRefreshTokenToLS(refreshToken)
+          setLoggedUserToLS(user)
+        }
+        // if (url === LOGOUT_URL) {
+        //   this.accessToken = null
+        //   this.refreshToken = null
+        //   this.profile = null
+        //   resetAuthLS()
+        // }
         return response
       },
-      function (error) {
-        // Any status codes that falls outside the range of 2xx cause this function to trigger
-        // Do something with response error
+      (error) => {
         return Promise.reject(error)
       }
     )
