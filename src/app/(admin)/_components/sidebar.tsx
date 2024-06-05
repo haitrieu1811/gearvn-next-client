@@ -2,12 +2,16 @@
 
 import { Home, StickyNote, Store, Tags, TicketPercent, UsersRound } from 'lucide-react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import React from 'react'
 
 import { Button } from '@/components/ui/button'
 import PATH from '@/constants/path'
+import { cn } from '@/lib/utils'
 
 export default function AdminSidebar() {
+  const pathname = usePathname()
+
   const sidebarItemsRef = React.useRef([
     {
       href: PATH.HOME,
@@ -51,26 +55,40 @@ export default function AdminSidebar() {
     <React.Fragment>
       <div className='p-4'>
         <Link href={PATH.ADMIN} className='flex flex-col items-end'>
-          <span className='font-bold text-3xl'>Gearvn</span>
+          <span className='font-bold text-3xl tracking-tight'>Gearvn</span>
           <span className='uppercase text-muted-foreground text-sm'>admin</span>
         </Link>
       </div>
       <div className='p-2 space-y-1'>
-        {sidebarItemsRef.current.map((sidebarItem) => (
-          <Button key={sidebarItem.href} asChild variant='ghost' className='flex justify-between w-full'>
-            <Link href={sidebarItem.href} className='text-muted-foreground'>
-              <div className='flex items-center space-x-3'>
-                <sidebarItem.icon size={18} />
-                <span className='capitalize'>{sidebarItem.name}</span>
-              </div>
-              {!!sidebarItem.notificationCount && (
-                <span className='text-[10px] font-bold bg-main text-white w-5 h-5 rounded-full flex justify-center items-center'>
-                  {sidebarItem.notificationCount}
-                </span>
-              )}
-            </Link>
-          </Button>
-        ))}
+        {sidebarItemsRef.current.map((sidebarItem) => {
+          const isActive = sidebarItem.href === pathname
+          return (
+            <Button
+              key={sidebarItem.href}
+              asChild
+              variant='ghost'
+              className={cn('flex justify-between w-full', {
+                'bg-muted': isActive
+              })}
+            >
+              <Link href={sidebarItem.href} className='text-muted-foreground'>
+                <div
+                  className={cn('flex items-center space-x-3', {
+                    'text-black dark:text-white': isActive
+                  })}
+                >
+                  <sidebarItem.icon size={18} />
+                  <span className='capitalize'>{sidebarItem.name}</span>
+                </div>
+                {!!sidebarItem.notificationCount && (
+                  <span className='text-[10px] font-bold bg-main text-white w-5 h-5 rounded-full flex justify-center items-center'>
+                    {sidebarItem.notificationCount}
+                  </span>
+                )}
+              </Link>
+            </Button>
+          )
+        })}
       </div>
     </React.Fragment>
   )

@@ -19,3 +19,10 @@ export type AuthResponse = SuccessResponse<{
   refreshToken: string
   user: LoggedUser
 }>
+
+export type Pagination = {
+  page: number
+  limit: number
+  totalRows: number
+  totalPages: number
+}

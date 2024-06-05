@@ -22,7 +22,7 @@ export default function AdminLayout({ children }: Readonly<{ children: React.Rea
         }}
       >
         <AdminHeader />
-        <main className='bg-muted min-h-screen'>{children}</main>
+        <main className='bg-muted min-h-screen p-5'>{children}</main>
       </div>
     </React.Fragment>
   )

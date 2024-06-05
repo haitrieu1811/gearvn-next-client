@@ -1,5 +1,5 @@
 import Tippy from '@tippyjs/react/headless'
-import { BarChartBig, Eye, Hand, LogOut, LucideIcon, NotepadText, User } from 'lucide-react'
+import { BarChartBig, Eye, Hand, LogOut, LucideIcon, NotepadText, UserRound } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
@@ -121,7 +121,7 @@ export default function CustomerHeaderAuth() {
         )}
       >
         <div className='flex items-center space-x-2 text-white bg-main-foreground h-10 px-2 rounded-md hover:cursor-pointer'>
-          <User />
+          <UserRound />
           <div className='text-[13px] font-medium leading-tight'>
             <div>{!!loggedUser && isClient ? 'Xin chào' : 'Đăng'}</div>
             <div>{!!loggedUser && isClient ? loggedUser.fullName : 'nhập'}</div>

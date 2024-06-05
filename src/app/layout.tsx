@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Chivo as FontSans } from 'next/font/google'
+import { Arimo as FontSans } from 'next/font/google'
 import NextTopLoader from 'nextjs-toploader'
 
 import { Toaster } from '@/components/ui/sonner'
@@ -12,7 +12,7 @@ import './globals.css'
 const fontSans = FontSans({
   subsets: ['latin'],
   variable: '--font-sans',
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900']
+  weight: ['400', '500', '600', '700']
 })
 
 export const metadata: Metadata = {
@@ -31,7 +31,7 @@ export default function RootLayout({
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
           <TanstackProvider>
             <AppProvider>
-              <NextTopLoader showSpinner={false} color='red' height={2} />
+              <NextTopLoader showSpinner={false} color='yellow' height={2} />
               {children}
               <Toaster richColors position='top-center' />
             </AppProvider>
