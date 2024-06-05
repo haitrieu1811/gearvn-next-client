@@ -1,15 +1,23 @@
 import Tippy from '@tippyjs/react/headless'
-import { Eye, Hand, LogOut, NotepadText, User } from 'lucide-react'
+import { BarChartBig, Eye, Hand, LogOut, LucideIcon, NotepadText, User } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
 import LoginForm from '@/app/(customer)/_components/login-form'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { UserType } from '@/constants/enum'
 import PATH from '@/constants/path'
 import useIsClient from '@/hooks/useIsClient'
 import useLogout from '@/hooks/useLogout'
 import { AppContext } from '@/providers/app.provider'
+
+type UserActionRef = {
+  href: string | null
+  name: string
+  icon: LucideIcon
+  onClick?: () => void
+}
 
 export default function CustomerHeaderAuth() {
   const [isShowLoginDialog, setIsShowLoginDialog] = React.useState<boolean>(false)
@@ -19,14 +27,14 @@ export default function CustomerHeaderAuth() {
   const isClient = useIsClient()
   const { handleLogout } = useLogout()
 
-  const userActionsRef = React.useRef([
+  const userActionsRef = React.useRef<UserActionRef[]>([
     {
       href: PATH.ACCOUNT_ORDER,
       name: 'Đơn hàng của tôi',
       icon: NotepadText
     },
     {
-      href: PATH.ACCOUNT_ORDER,
+      href: PATH.HOME,
       name: 'Đã xem gần đây',
       icon: Eye
     },
@@ -34,7 +42,7 @@ export default function CustomerHeaderAuth() {
       href: null,
       name: 'Đăng xuất',
       icon: LogOut,
-      onclick: handleLogout
+      onClick: handleLogout
     }
   ])
 
@@ -82,6 +90,12 @@ export default function CustomerHeaderAuth() {
             )}
             {!!loggedUser && isClient && (
               <div className='border-t'>
+                {[UserType.Admin, UserType.Staff].includes(loggedUser.type) && (
+                  <Link href={PATH.ADMIN} className='flex items-center space-x-2 w-full px-4 py-2.5 hover:underline'>
+                    <BarChartBig strokeWidth={1.5} size={20} />
+                    <span className='text-sm'>Trang quản trị</span>
+                  </Link>
+                )}
                 {userActionsRef.current.map((userAction, index) => {
                   let Comp: any = 'button'
                   const props: { href?: string } = {}
@@ -92,7 +106,7 @@ export default function CustomerHeaderAuth() {
                   return (
                     <Comp
                       key={index}
-                      onClick={userAction.onclick}
+                      onClick={userAction.onClick}
                       {...props}
                       className='flex items-center space-x-2 w-full px-4 py-2.5 hover:underline'
                     >
