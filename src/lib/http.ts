@@ -1,10 +1,11 @@
 import axios, { AxiosInstance } from 'axios'
 
-import { LOGIN_URL } from '@/apis/users.apis'
+import { LOGIN_URL, LOGOUT_URL } from '@/apis/users.apis'
 import {
   getAccessTokenFromLS,
   getLoggedUserFromLS,
   getRefreshTokenFromLS,
+  resetAuthLS,
   setAccessTokenToLS,
   setLoggedUserToLS,
   setRefreshTokenToLS
@@ -56,12 +57,12 @@ class Http {
           setRefreshTokenToLS(refreshToken)
           setLoggedUserToLS(user)
         }
-        // if (url === LOGOUT_URL) {
-        //   this.accessToken = null
-        //   this.refreshToken = null
-        //   this.profile = null
-        //   resetAuthLS()
-        // }
+        if (url === LOGOUT_URL) {
+          this.accessToken = null
+          this.refreshToken = null
+          this.loggedUser = null
+          resetAuthLS()
+        }
         return response
       },
       (error) => {

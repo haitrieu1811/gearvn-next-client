@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import PATH from '@/constants/path'
 import useIsClient from '@/hooks/useIsClient'
+import useLogout from '@/hooks/useLogout'
 import { AppContext } from '@/providers/app.provider'
 
 export default function CustomerHeaderAuth() {
@@ -16,6 +17,7 @@ export default function CustomerHeaderAuth() {
   const { loggedUser } = React.useContext(AppContext)
 
   const isClient = useIsClient()
+  const { handleLogout } = useLogout()
 
   const userActionsRef = React.useRef([
     {
@@ -32,7 +34,7 @@ export default function CustomerHeaderAuth() {
       href: null,
       name: 'Đăng xuất',
       icon: LogOut,
-      onclick: () => {}
+      onclick: handleLogout
     }
   ])
 
