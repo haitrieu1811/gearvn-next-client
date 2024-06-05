@@ -10,6 +10,7 @@ import usersApis from '@/apis/users.apis'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { handleErrorsFromServer } from '@/lib/utils'
 import { AppContext } from '@/providers/app.provider'
 import { LoginSchema, loginSchema } from '@/rules/users.rules'
 import { LoginReqBody } from '@/types/users.types'
@@ -39,6 +40,9 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
       setLoggedUser(user)
       toast.success(data.data.message)
       onSuccess && onSuccess(data)
+    },
+    onError: (errors) => {
+      handleErrorsFromServer({ form, errors })
     }
   })
 
