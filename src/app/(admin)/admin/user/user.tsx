@@ -1,30 +1,16 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
 import { Dumbbell, Headset, PlusCircle, UserRound, UsersRound } from 'lucide-react'
-import React from 'react'
 
-import usersApis from '@/apis/users.apis'
 import { columns, facetedFilter } from '@/app/(admin)/_columns/users.columns'
 import AnalyticsCard from '@/app/(admin)/_components/analytics-card'
 import DataTable from '@/components/data-table'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import useAllUsers from '@/hooks/useAllUsers'
 
 export default function AdminUser() {
-  const getAllUsersQuery = useQuery({
-    queryKey: ['getAllUsers'],
-    queryFn: () => usersApis.getAllUsers()
-  })
-
-  const allUsers = React.useMemo(
-    () => getAllUsersQuery.data?.data.data.users || [],
-    [getAllUsersQuery.data?.data.data.users]
-  )
-  const analytics = React.useMemo(
-    () => getAllUsersQuery.data?.data.data.analytics,
-    [getAllUsersQuery.data?.data.data.analytics]
-  )
+  const { allUsers, analytics } = useAllUsers({})
 
   return (
     <div className='space-y-5'>

@@ -206,7 +206,7 @@ export default function CreateRoleForm({ roleId, onCreateSuccess, onUpdateSucces
             )}
           />
         </div>
-        <Button type='submit' disabled={isPending}>
+        <Button type='submit' disabled={isPending} className='w-full uppercase'>
           {isPending && <Loader2 className='w-4 h-4 mr-2 animate-spin' />}
           {!isUpdateMode ? 'Tạo vai trò' : 'Cập nhật vai trò'}
         </Button>

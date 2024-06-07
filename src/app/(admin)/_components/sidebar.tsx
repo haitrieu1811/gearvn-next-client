@@ -38,6 +38,12 @@ export default function AdminSidebar() {
       notificationCount: 0
     },
     {
+      href: PATH.ADMIN_PERMISSION,
+      name: 'Quản lý vai trò của nhân viên',
+      icon: UsersRound,
+      notificationCount: 0
+    },
+    {
       href: PATH.ADMIN_PRODUCT,
       name: 'Quản lý sản phẩm',
       icon: Tags,
@@ -73,7 +79,7 @@ export default function AdminSidebar() {
               key={sidebarItem.href}
               asChild
               variant='ghost'
-              className={cn('flex justify-between w-full', {
+              className={cn('flex justify-between w-full text-wrap h-auto', {
                 'bg-muted': isActive
               })}
             >
@@ -83,7 +89,7 @@ export default function AdminSidebar() {
                     'text-black dark:text-white': isActive
                   })}
                 >
-                  <sidebarItem.icon size={18} />
+                  <sidebarItem.icon size={18} className='flex-shrink-0' />
                   <span className='capitalize'>{sidebarItem.name}</span>
                 </div>
                 {!!sidebarItem.notificationCount && (

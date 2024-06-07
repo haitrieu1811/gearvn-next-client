@@ -3,6 +3,7 @@ import {
   CreateRoleReqBody,
   CreateRoleResponse,
   GetAllRolesResponse,
+  GetPermissionsGroupByUserResponse,
   GetRoleResponse,
   UpdateRoleReqBody,
   UpdateRoleResponse

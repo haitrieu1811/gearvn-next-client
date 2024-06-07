@@ -1,4 +1,4 @@
-import { RoleField, RoleType } from '@/constants/enum'
+import { Gender, RoleField, RoleType, UserStatus, UserType, UserVerifyStatus } from '@/constants/enum'
 import { Pagination, SuccessResponse } from '@/types/utils.types'
 
 export type RoleItem = {
@@ -9,6 +9,25 @@ export type RoleItem = {
   description: string
   createdAt: string
   updatedAt: string
+}
+
+export type PermissionGroupByUser = {
+  _id: string
+  email: string
+  fullName: string
+  avatar: string
+  type: UserType
+  gender: Gender
+  phoneNumber: string
+  status: UserStatus
+  verify: UserVerifyStatus
+  roles: {
+    _id: string
+    name: string
+    description: string
+    createdAt: string
+    updatedAt: string
+  }[]
 }
 
 export type CreateRoleReqBody = {
@@ -35,4 +54,9 @@ export type GetRoleResponse = SuccessResponse<{
 
 export type UpdateRoleResponse = SuccessResponse<{
   role: RoleItem
+}>
+
+export type GetPermissionsGroupByUserResponse = SuccessResponse<{
+  permissions: PermissionGroupByUser[]
+  pagination: Pagination
 }>

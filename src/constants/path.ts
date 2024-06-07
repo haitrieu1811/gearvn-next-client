@@ -15,7 +15,8 @@ const PATH = {
   ADMIN_POST_UPDATE: (postId: string) => `/admin/post/${postId}`,
   ADMIN_ORDER: '/admin/order',
   ADMIN_ORDER_DETAIL: (orderId: string) => `/admin/order/${orderId}`,
-  ADMIN_ROLE: '/admin/role'
+  ADMIN_ROLE: '/admin/role',
+  ADMIN_PERMISSION: '/admin/permission'
 } as const
 
 export default PATH
