@@ -32,6 +32,12 @@ export default function AdminSidebar() {
       notificationCount: 0
     },
     {
+      href: PATH.ADMIN_ROLE,
+      name: 'Quản lý vai trò',
+      icon: UsersRound,
+      notificationCount: 0
+    },
+    {
       href: PATH.ADMIN_PRODUCT,
       name: 'Quản lý sản phẩm',
       icon: Tags,

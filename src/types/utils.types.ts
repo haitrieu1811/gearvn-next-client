@@ -26,3 +26,8 @@ export type Pagination = {
   totalRows: number
   totalPages: number
 }
+
+export type PaginationReqQuery = {
+  page?: string
+  limit?: string
+}

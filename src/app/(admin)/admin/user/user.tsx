@@ -8,8 +8,8 @@ import usersApis from '@/apis/users.apis'
 import { columns, facetedFilter } from '@/app/(admin)/_columns/users.columns'
 import AnalyticsCard from '@/app/(admin)/_components/analytics-card'
 import DataTable from '@/components/data-table'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function AdminUser() {
   const getAllUsersQuery = useQuery({
@@ -21,7 +21,6 @@ export default function AdminUser() {
     () => getAllUsersQuery.data?.data.data.users || [],
     [getAllUsersQuery.data?.data.data.users]
   )
-
   const analytics = React.useMemo(
     () => getAllUsersQuery.data?.data.data.analytics,
     [getAllUsersQuery.data?.data.data.analytics]
