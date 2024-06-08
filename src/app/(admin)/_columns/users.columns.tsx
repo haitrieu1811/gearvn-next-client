@@ -171,8 +171,7 @@ export const columns: ColumnDef<UserItem>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end'>
-            <DropdownMenuItem>Cập nhật tài khoản</DropdownMenuItem>
-            <DropdownMenuItem>Xóa tài khoản</DropdownMenuItem>
+            <DropdownMenuItem>Cập nhật</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

@@ -40,6 +40,15 @@ export type GetAllUsersReqQuery = {
   verify?: UserVerifyStatus
 }
 
+export type CreateUserReqBody = {
+  email: string
+  fullName: string
+  password: string
+  confirmPassword: string
+  gender: Gender
+  type: UserType
+}
+
 export type GetAllUsersResponse = SuccessResponse<{
   users: UserItem[]
   analytics: {
@@ -55,4 +64,14 @@ export type GetAllUsersResponse = SuccessResponse<{
     totalUnverified: number
   }
   pagination: Pagination
+}>
+
+export type CreateUserResponse = SuccessResponse<{
+  user: {
+    _id: string
+    email: string
+    fullName: string
+    createdAt: string
+    updatedAt: string
+  }
 }>

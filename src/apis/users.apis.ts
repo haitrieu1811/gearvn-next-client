@@ -1,5 +1,5 @@
 import http from '@/lib/http'
-import { GetAllUsersReqQuery, GetAllUsersResponse, LoginReqBody } from '@/types/users.types'
+import { CreateUserReqBody, GetAllUsersReqQuery, GetAllUsersResponse, LoginReqBody } from '@/types/users.types'
 import { AuthResponse, OnlyMessageResponse } from '@/types/utils.types'
 
 export const LOGIN_URL = '/v1/users/login'
@@ -17,6 +17,10 @@ const usersApis = {
 
   getAllUsers(params?: GetAllUsersReqQuery) {
     return http.get<GetAllUsersResponse>('/v1/users/all', { params })
+  },
+
+  createUser(body: CreateUserReqBody) {
+    return http.post<GetAllUsersResponse>('/v1/users', body)
   }
 } as const
 

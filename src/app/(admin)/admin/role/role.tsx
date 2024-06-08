@@ -13,46 +13,52 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import useAllRoles from '@/hooks/useAllRoles'
 
 export default function AdminRole() {
-  const [isShowCreateDialog, setIsShowCreateDialog] = React.useState<boolean>(false)
+  const [isOpenCreateRoleDialog, setIsOpenCreateRoleDialog] = React.useState<boolean>(false)
 
-  const { getAllRolesQuery, allRoles, totalRole } = useAllRoles()
+  const { allRoles, totalRole } = useAllRoles()
 
   return (
-    <div className='space-y-5'>
-      <Dialog open={isShowCreateDialog} onOpenChange={(value) => setIsShowCreateDialog(value)}>
+    <React.Fragment>
+      <div className='space-y-5'>
+        {/* ANALYTIC CARDS */}
+        <div className='grid grid-cols-12 gap-5'>
+          <div className='col-span-3'>
+            <AnalyticsCard
+              Icon={Map}
+              mainNumber={totalRole}
+              strongText='Có tổng cộng'
+              slimText='vai trò trên hệ thống'
+            />
+          </div>
+        </div>
+        {/* BUTTONS GROUP */}
+        <div className='flex justify-end'>
+          <Button size='sm' onClick={() => setIsOpenCreateRoleDialog(true)}>
+            <PlusCircle size={16} strokeWidth={1.5} className='mr-2' />
+            Thêm vai trò mới
+          </Button>
+        </div>
+        {/* TABLE DATA */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Danh sách vài trò</CardTitle>
+            <CardDescription>Có {totalRole} vai trò trên hệ thống</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <DataTable columns={columns} data={allRoles} searchField='name' facetedFilter={facetedFilter} />
+          </CardContent>
+        </Card>
+      </div>
+      {/* CREATE ROLE FORM */}
+      <Dialog open={isOpenCreateRoleDialog} onOpenChange={(value) => setIsOpenCreateRoleDialog(value)}>
         <DialogContent className='max-h-screen overflow-y-auto'>
           <DialogHeader>
             <DialogTitle>Thêm vai trò mới</DialogTitle>
             <DialogDescription>Thêm vai trò mới và gán vai trò đó cho người dùng.</DialogDescription>
           </DialogHeader>
-          <CreateRoleForm onCreateSuccess={() => setIsShowCreateDialog(false)} />
+          <CreateRoleForm onCreateSuccess={() => setIsOpenCreateRoleDialog(false)} />
         </DialogContent>
       </Dialog>
-      <div className='grid grid-cols-12 gap-5'>
-        <div className='col-span-3'>
-          <AnalyticsCard
-            icon={<Map strokeWidth={1.5} size={16} />}
-            mainNumber={totalRole}
-            strongText='Có tổng cộng'
-            slimText='vai trò trên hệ thống'
-          />
-        </div>
-      </div>
-      <div className='flex justify-end'>
-        <Button size='sm' onClick={() => setIsShowCreateDialog(true)}>
-          <PlusCircle size={16} strokeWidth={1.5} className='mr-2' />
-          Thêm vai trò mới
-        </Button>
-      </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>Danh sách vài trò</CardTitle>
-          <CardDescription>Có {totalRole} vai trò trên hệ thống</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <DataTable columns={columns} data={allRoles} searchField='name' facetedFilter={facetedFilter} />
-        </CardContent>
-      </Card>
-    </div>
+    </React.Fragment>
   )
 }

@@ -49,13 +49,13 @@ export default function AdminPermission() {
   const analyticCards = React.useMemo(
     () => [
       {
-        icon: <User size={16} strokeWidth={1.5} />,
+        icon: User,
         strongText: 'Tổng cộng',
         mainNumber: totalRole,
         slimText: 'quyền trên hệ thống'
       },
       {
-        icon: <User size={16} strokeWidth={1.5} />,
+        icon: User,
         strongText: 'Tổng cộng',
         mainNumber: analytics?.totalStaff || 0,
         slimText: 'nhân viên trên hệ thống'
@@ -65,43 +65,45 @@ export default function AdminPermission() {
   )
 
   return (
-    <div className='space-y-5'>
-      {/* ANALYTIC CARDS */}
-      <div className='grid grid-cols-12 gap-5'>
-        {analyticCards.map((analyticCard, index) => (
-          <div key={index} className='col-span-3'>
-            <AnalyticsCard
-              icon={analyticCard.icon}
-              strongText={analyticCard.strongText}
-              mainNumber={analyticCard.mainNumber}
-              slimText={analyticCard.slimText}
-            />
-          </div>
-        ))}
+    <React.Fragment>
+      <div className='space-y-5'>
+        {/* ANALYTIC CARDS */}
+        <div className='grid grid-cols-12 gap-5'>
+          {analyticCards.map((analyticCard, index) => (
+            <div key={index} className='col-span-3'>
+              <AnalyticsCard
+                Icon={analyticCard.icon}
+                strongText={analyticCard.strongText}
+                mainNumber={analyticCard.mainNumber}
+                slimText={analyticCard.slimText}
+              />
+            </div>
+          ))}
+        </div>
+        {/* BUTTONS GROUP */}
+        <div className='flex justify-end space-x-2'>
+          <Button size='sm' onClick={() => setIsOpenCreatePermissionForm(true)}>
+            <PlusCircle size={16} className='mr-2' />
+            Phân quyền cho nhân viên
+          </Button>
+        </div>
+        {/* TABLE DATA */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Vai trò của nhân viên</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <AdminPermissionContext.Provider
+              value={{
+                currentStaffId,
+                setCurrentStaffId
+              }}
+            >
+              <DataTable columns={columns} data={permissions} searchField='email' />
+            </AdminPermissionContext.Provider>
+          </CardContent>
+        </Card>
       </div>
-      {/* BUTTONS GROUP */}
-      <div className='flex justify-end space-x-2'>
-        <Button size='sm' onClick={() => setIsOpenCreatePermissionForm(true)}>
-          <PlusCircle size={16} className='mr-2' />
-          Phân quyền cho nhân viên
-        </Button>
-      </div>
-      {/* TABLE DATA */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Vai trò của nhân viên</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <AdminPermissionContext.Provider
-            value={{
-              currentStaffId,
-              setCurrentStaffId
-            }}
-          >
-            <DataTable columns={columns} data={permissions} searchField='email' />
-          </AdminPermissionContext.Provider>
-        </CardContent>
-      </Card>
       {/* CREATE PERMISSION DIALOG */}
       <Dialog open={isOpenCreatePermissionForm} onOpenChange={(value) => setIsOpenCreatePermissionForm(value)}>
         <DialogContent>
@@ -132,6 +134,6 @@ export default function AdminPermission() {
           <UpdatePermissionForm userId={currentStaffId} />
         </DialogContent>
       </Dialog>
-    </div>
+    </React.Fragment>
   )
 }

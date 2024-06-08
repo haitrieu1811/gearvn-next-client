@@ -1,4 +1,4 @@
-import React from 'react'
+import { LucideIcon } from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
@@ -6,15 +6,15 @@ type AnalyticsCardProps = {
   strongText: string
   slimText: string
   mainNumber: number
-  icon: React.ReactNode
+  Icon: LucideIcon
 }
 
-export default function AnalyticsCard({ strongText, slimText, mainNumber, icon }: AnalyticsCardProps) {
+export default function AnalyticsCard({ strongText, slimText, mainNumber, Icon }: AnalyticsCardProps) {
   return (
     <Card>
       <CardHeader className='flex-row justify-between items-center space-y-0'>
         <CardTitle>{strongText}</CardTitle>
-        {icon}
+        <Icon strokeWidth={1.5} size={18} />
       </CardHeader>
       <CardContent>
         <div className='text-2xl font-bold'>{mainNumber}</div>
