@@ -44,6 +44,12 @@ export default function AdminSidebar() {
       notificationCount: 0
     },
     {
+      href: PATH.ADMIN_PRODUCT_CATEGORY,
+      name: 'Quản lý danh mục sản phẩm',
+      icon: Tags,
+      notificationCount: 0
+    },
+    {
       href: PATH.ADMIN_PRODUCT,
       name: 'Quản lý sản phẩm',
       icon: Tags,

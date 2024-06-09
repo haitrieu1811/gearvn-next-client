@@ -165,7 +165,7 @@ export const columns: ColumnDef<UserItem>[] = [
     cell: () => (
       <div className='flex justify-end'>
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild>
             <Button size='icon' variant='ghost'>
               <Ellipsis size={18} strokeWidth={1.5} />
             </Button>

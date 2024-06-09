@@ -1,8 +1,9 @@
 import http from '@/lib/http'
+import { UploadImageResponse } from '@/types/files.types'
 
 const filesApis = {
   uploadImage(body: FormData) {
-    return http.post('/v1/files/upload-image', body, {
+    return http.post<UploadImageResponse>('/v1/files/upload-image', body, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

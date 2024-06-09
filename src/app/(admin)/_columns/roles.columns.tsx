@@ -25,9 +25,7 @@ export const roleTypeEnumToString = {
 
 export const roleFieldEnumToString = {
   [RoleField.Product]: 'Sản phẩm',
-  [RoleField.ProductCategory]: 'Danh mục sản phẩm',
   [RoleField.Post]: 'Bài viết',
-  [RoleField.PostCategory]: 'Danh mục bài viết',
   [RoleField.Order]: 'Đơn hàng'
 } as const
 
@@ -127,7 +125,7 @@ export const columns: ColumnDef<RoleItem>[] = [
           </Dialog>
 
           <DropdownMenu>
-            <DropdownMenuTrigger>
+            <DropdownMenuTrigger asChild>
               <Button size='icon' variant='ghost'>
                 <Ellipsis size={18} strokeWidth={1.5} />
               </Button>

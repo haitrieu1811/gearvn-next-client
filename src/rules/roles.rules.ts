@@ -11,18 +11,9 @@ export const rolesSchema = z.object({
       message: 'Loại vai trò không hợp lệ.'
     }
   ),
-  field: z.enum(
-    [
-      RoleField.Order.toString(),
-      RoleField.Post.toString(),
-      RoleField.PostCategory.toString(),
-      RoleField.Product.toString(),
-      RoleField.ProductCategory.toString()
-    ],
-    {
-      message: 'Lĩnh vực vai trò không hợp lệ.'
-    }
-  )
+  field: z.enum([RoleField.Order.toString(), RoleField.Post.toString(), RoleField.Product.toString()], {
+    message: 'Lĩnh vực vai trò không hợp lệ.'
+  })
 })
 
 export const createRoleSchema = rolesSchema.pick({

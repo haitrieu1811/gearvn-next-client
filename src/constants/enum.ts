@@ -15,9 +15,7 @@ export enum RoleType {
 export enum RoleField {
   Product,
   Post,
-  Order,
-  ProductCategory,
-  PostCategory
+  Order
 }
 
 export enum UserType {

@@ -179,16 +179,8 @@ export default function CreateRoleForm({ roleId, onCreateSuccess, onUpdateSucces
                         text: 'Sản phẩm'
                       },
                       {
-                        value: RoleField.ProductCategory.toString(),
-                        text: 'Danh mục sản phẩm'
-                      },
-                      {
                         value: RoleField.Post.toString(),
                         text: 'Bài viết'
-                      },
-                      {
-                        value: RoleField.PostCategory.toString(),
-                        text: 'Danh mục bài viết'
                       },
                       {
                         value: RoleField.Order.toString(),

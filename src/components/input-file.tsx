@@ -31,7 +31,7 @@ export default function InputFile({ children, onChange, multiple = false, maxFil
         hidden
         ref={inputFileRef}
         type='file'
-        accept='.jpg,.jpeg,.png,.webp'
+        accept='.jpg,.jpeg,.png,.webp,.svg'
         onChange={handleFileChange}
         onClick={(e) => ((e.target as any).value = null)}
         multiple={multiple}
