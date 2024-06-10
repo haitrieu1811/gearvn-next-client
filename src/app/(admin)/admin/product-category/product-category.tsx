@@ -1,29 +1,43 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
-import { GalleryVerticalEnd, PlusCircle } from 'lucide-react'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { GalleryVerticalEnd, Loader2, PlusCircle } from 'lucide-react'
 import React from 'react'
+import { toast } from 'sonner'
 
 import productCategoriesApis from '@/apis/productCategories.apis'
 import { columns } from '@/app/(admin)/_columns/productCategories.columns'
 import AnalyticsCard from '@/app/(admin)/_components/analytics-card'
 import CreateProductCategoryForm from '@/app/(admin)/_components/create-product-category-form'
 import DataTable from '@/components/data-table'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle
+} from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 type AdminProductCategoryContext = {
-  setCurrentProductCategoryId: React.Dispatch<React.SetStateAction<string | null>>
+  setCurrentUpdatedProductCategoryId: React.Dispatch<React.SetStateAction<string | null>>
+  setCurrentDeletedProductCategoryId: React.Dispatch<React.SetStateAction<string | null>>
 }
 
 export const AdminProductCategoryContext = React.createContext<AdminProductCategoryContext>({
-  setCurrentProductCategoryId: () => null
+  setCurrentUpdatedProductCategoryId: () => null,
+  setCurrentDeletedProductCategoryId: () => null
 })
 
 export default function AdminProductCategory() {
   const [isOpenCreateProductCategoryDialog, setIsOpenCreateProductCategoryDialog] = React.useState<boolean>(false)
-  const [currentProductCategoryId, setCurrentProductCategoryId] = React.useState<string | null>(null)
+  const [currentUpdatedProductCategoryId, setCurrentUpdatedProductCategoryId] = React.useState<string | null>(null)
+  const [currentDeletedProductCategoryId, setCurrentDeletedProductCategoryId] = React.useState<string | null>(null)
 
   const getAllProductCategoriesQuery = useQuery({
     queryKey: ['getAllProductCategories'],
@@ -49,6 +63,20 @@ export default function AdminProductCategory() {
     ],
     [totalProductCategory]
   )
+
+  const deleteProductCategoryMutation = useMutation({
+    mutationKey: ['deleteProductCategory'],
+    mutationFn: productCategoriesApis.deleteProductCategory,
+    onSuccess: (data) => {
+      toast.success(data.data.message)
+      getAllProductCategoriesQuery.refetch()
+    }
+  })
+
+  const handleDeleteProductCategory = (productCategoryId: string | null) => {
+    if (!productCategoryId) return
+    deleteProductCategoryMutation.mutate(productCategoryId)
+  }
 
   return (
     <React.Fragment>
@@ -82,7 +110,8 @@ export default function AdminProductCategory() {
           <CardContent>
             <AdminProductCategoryContext.Provider
               value={{
-                setCurrentProductCategoryId
+                setCurrentUpdatedProductCategoryId,
+                setCurrentDeletedProductCategoryId
               }}
             >
               <DataTable columns={columns} data={productCategories} />
@@ -104,10 +133,10 @@ export default function AdminProductCategory() {
       </Dialog>
       {/* UPDATE PRODUCT CATEGORY DIALOG */}
       <Dialog
-        open={!!currentProductCategoryId}
+        open={!!currentUpdatedProductCategoryId}
         onOpenChange={(value) => {
           if (!value) {
-            setCurrentProductCategoryId(null)
+            setCurrentUpdatedProductCategoryId(null)
           }
         }}
       >
@@ -115,9 +144,37 @@ export default function AdminProductCategory() {
           <DialogHeader>
             <DialogTitle>Cập nhật danh mục sản phẩm </DialogTitle>
           </DialogHeader>
-          <CreateProductCategoryForm productCategoryId={currentProductCategoryId || undefined} />
+          <CreateProductCategoryForm productCategoryId={currentUpdatedProductCategoryId || undefined} />
         </DialogContent>
       </Dialog>
+      {/* DELETE PRODUCT CATEGORY ALERT DIALOG */}
+      <AlertDialog
+        open={!!currentDeletedProductCategoryId}
+        onOpenChange={(value) => {
+          if (!value) {
+            !deleteProductCategoryMutation.isPending && setCurrentDeletedProductCategoryId(null)
+          }
+        }}
+      >
+        <AlertDialogContent className='max-w-sm'>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Xóa vĩnh viễn danh mục sản phẩm?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Danh mục sản phẩm sẽ bị xóa vĩnh viễn và không thể khôi phục lại.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Hủy bỏ</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={deleteProductCategoryMutation.isPending}
+              onClick={() => handleDeleteProductCategory(currentDeletedProductCategoryId)}
+            >
+              {deleteProductCategoryMutation.isPending && <Loader2 className='w-4 h-4 mr-2 animate-spin' />}
+              Tiếp tục
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </React.Fragment>
   )
 }

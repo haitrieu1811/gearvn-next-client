@@ -86,7 +86,8 @@ export const columns: ColumnDef<ProductCategoryItem>[] = [
     header: () => <div className='text-xs text-muted-foreground text-right'>Thao tác</div>,
     cell: ({ row }) => {
       const productCategory = row.original
-      const { setCurrentProductCategoryId } = React.useContext(AdminProductCategoryContext)
+      const { setCurrentUpdatedProductCategoryId, setCurrentDeletedProductCategoryId } =
+        React.useContext(AdminProductCategoryContext)
       return (
         <div className='flex justify-end'>
           <DropdownMenu>
@@ -96,10 +97,12 @@ export const columns: ColumnDef<ProductCategoryItem>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end'>
-              <DropdownMenuItem onClick={() => setCurrentProductCategoryId(productCategory._id)}>
+              <DropdownMenuItem onClick={() => setCurrentUpdatedProductCategoryId(productCategory._id)}>
                 Cập nhật
               </DropdownMenuItem>
-              <DropdownMenuItem>Xóa vĩnh viên</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setCurrentDeletedProductCategoryId(productCategory._id)}>
+                Xóa vĩnh viên
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

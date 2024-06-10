@@ -7,7 +7,7 @@ import {
   UpdateProductCategoryReqBody,
   UpdateProductCategoryResponse
 } from '@/types/productCategories.types'
-import { PaginationReqQuery } from '@/types/utils.types'
+import { OnlyMessageResponse, PaginationReqQuery } from '@/types/utils.types'
 
 const productCategoriesApis = {
   getAllProductCategories(params?: PaginationReqQuery) {
@@ -30,6 +30,10 @@ const productCategoriesApis = {
     productCategoryId: string
   }) {
     return http.patch<UpdateProductCategoryResponse>(`/v1/product-categories/${productCategoryId}`, body)
+  },
+
+  deleteProductCategory(productCategoryId: string) {
+    return http.delete<OnlyMessageResponse>(`/v1/product-categories/${productCategoryId}`)
   }
 } as const
 
