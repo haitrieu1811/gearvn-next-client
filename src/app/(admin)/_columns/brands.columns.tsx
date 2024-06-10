@@ -4,31 +4,31 @@ import { Ellipsis } from 'lucide-react'
 import moment from 'moment'
 import React from 'react'
 
-import { AdminProductCategoryContext } from '@/app/(admin)/admin/product-category/product-category'
+import { AdminBrandContext } from '@/app/(admin)/admin/brand/brand'
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { ProductCategoryStatus } from '@/constants/enum'
+import { BrandStatus } from '@/constants/enum'
 import { convertMomentToVietnamese } from '@/lib/utils'
-import { ProductCategoryItem } from '@/types/productCategories.types'
+import { BrandItem } from '@/types/brands.types'
 
 const statusBadges = {
-  [ProductCategoryStatus.Active]: (
+  [BrandStatus.Active]: (
     <Badge variant='outline' className='border-green-500 text-green-500'>
       Đang hoạt động
     </Badge>
   ),
-  [ProductCategoryStatus.Inactive]: (
+  [BrandStatus.Inactive]: (
     <Badge variant='outline' className='border-red-500 text-red-500'>
       Không hoạt động
     </Badge>
   )
 } as const
 
-export const columns: ColumnDef<ProductCategoryItem>[] = [
+export const columns: ColumnDef<BrandItem>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -85,9 +85,8 @@ export const columns: ColumnDef<ProductCategoryItem>[] = [
     id: 'actions',
     header: () => <div className='text-xs text-muted-foreground text-right'>Thao tác</div>,
     cell: ({ row }) => {
-      const productCategory = row.original
-      const { setCurrentUpdatedProductCategoryId, setCurrentDeletedProductCategoryId } =
-        React.useContext(AdminProductCategoryContext)
+      const brand = row.original
+      const { setCurrentDeletedBrandId, setCurrentUpdatedBrandId } = React.useContext(AdminBrandContext)
       return (
         <div className='flex justify-end'>
           <DropdownMenu>
@@ -97,12 +96,8 @@ export const columns: ColumnDef<ProductCategoryItem>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end'>
-              <DropdownMenuItem onClick={() => setCurrentUpdatedProductCategoryId(productCategory._id)}>
-                Cập nhật
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setCurrentDeletedProductCategoryId(productCategory._id)}>
-                Xóa vĩnh viên
-              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setCurrentUpdatedBrandId(brand._id)}>Cập nhật</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setCurrentDeletedBrandId(brand._id)}>Xóa vĩnh viên</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

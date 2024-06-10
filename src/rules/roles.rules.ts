@@ -2,7 +2,7 @@ import z from 'zod'
 
 import { RoleField, RoleType } from '@/constants/enum'
 
-export const rolesSchema = z.object({
+export const roleSchema = z.object({
   name: z.string().min(1, 'Tên vai trò là bắt buộc.'),
   description: z.string().optional(),
   type: z.enum(
@@ -16,7 +16,7 @@ export const rolesSchema = z.object({
   })
 })
 
-export const createRoleSchema = rolesSchema.pick({
+export const createRoleSchema = roleSchema.pick({
   name: true,
   description: true,
   type: true,

@@ -114,7 +114,7 @@ export const columns: ColumnDef<UserItem>[] = [
     cell: ({ row }) => (
       <div className='flex items-center space-x-3'>
         <Avatar>
-          <AvatarImage src={row.original.avatar} />
+          <AvatarImage src={row.original.avatar} className='object-cover' />
           <AvatarFallback>
             {row.original.fullName[0].toUpperCase()}
             {row.original.fullName[1].toUpperCase()}

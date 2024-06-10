@@ -1,6 +1,6 @@
 'use client'
 
-import { Home, StickyNote, Store, Tags, TicketPercent, UsersRound } from 'lucide-react'
+import { Goal, Home, StickyNote, Store, Tags, TicketPercent, UsersRound } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
@@ -47,6 +47,12 @@ export default function AdminSidebar() {
       href: PATH.ADMIN_PRODUCT_CATEGORY,
       name: 'Quản lý danh mục sản phẩm',
       icon: Tags,
+      notificationCount: 0
+    },
+    {
+      href: PATH.ADMIN_BRAND,
+      name: 'Quản lý thương hiệu',
+      icon: Goal,
       notificationCount: 0
     },
     {

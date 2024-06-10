@@ -114,7 +114,7 @@ export default function AdminProductCategory() {
                 setCurrentDeletedProductCategoryId
               }}
             >
-              <DataTable columns={columns} data={productCategories} />
+              <DataTable columns={columns} data={productCategories} searchField='name' />
             </AdminProductCategoryContext.Provider>
           </CardContent>
         </Card>

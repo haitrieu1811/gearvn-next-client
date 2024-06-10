@@ -12,7 +12,7 @@ export default function AdminLayout({ children }: Readonly<{ children: React.Rea
         style={{
           width: `${SIDEBAR_WIDTH}px`
         }}
-        className='fixed inset-y-0 left-0 w-[200px]'
+        className='fixed inset-y-0 left-0 w-[200px] max-h-screen overflow-y-auto'
       >
         <AdminSidebar />
       </aside>

@@ -3,7 +3,7 @@ import z from 'zod'
 import { Gender, UserType } from '@/constants/enum'
 import { EMAIL_REGEX } from '@/constants/regex'
 
-export const usersSchema = z.object({
+export const userSchema = z.object({
   email: z.string().min(1, 'Email là bắt buộc.').regex(EMAIL_REGEX, 'Email không hợp lệ.'),
   password: z.string().min(12, 'Mật khẩu dài tối thiểu 12 ký tự.').max(36, 'Mật khẩu dài tối đa 36 ký tự.'),
   confirmPassword: z.string().min(1, 'Nhập lại mật khẩu là bắt buộc.'),
@@ -16,12 +16,12 @@ export const usersSchema = z.object({
   })
 })
 
-export const loginSchema = usersSchema.pick({
+export const loginSchema = userSchema.pick({
   email: true,
   password: true
 })
 
-export const createUserSchema = usersSchema
+export const createUserSchema = userSchema
   .pick({
     email: true,
     fullName: true,
