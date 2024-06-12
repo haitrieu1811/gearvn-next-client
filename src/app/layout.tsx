@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Arimo as FontSans } from 'next/font/google'
+import { Chivo as FontSans } from 'next/font/google'
 import NextTopLoader from 'nextjs-toploader'
 
 import { Toaster } from '@/components/ui/sonner'
@@ -12,7 +12,7 @@ import './globals.css'
 const fontSans = FontSans({
   subsets: ['latin'],
   variable: '--font-sans',
-  weight: ['400', '500', '600', '700']
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900']
 })
 
 export const metadata: Metadata = {

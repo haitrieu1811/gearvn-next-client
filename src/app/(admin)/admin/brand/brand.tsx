@@ -1,6 +1,6 @@
 'use client'
 
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { CirclePlus, Goal, Loader2 } from 'lucide-react'
 import React from 'react'
 import { toast } from 'sonner'
@@ -23,6 +23,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import useAllBrands from '@/hooks/useAllBrands'
 
 type AdminBrandContext = {
   setCurrentUpdatedBrandId: React.Dispatch<React.SetStateAction<string | null>>
@@ -39,19 +40,8 @@ export default function AdminBrand() {
   const [currentUpdatedBrandId, setCurrentUpdatedBrandId] = React.useState<string | null>(null)
   const [currentDeletedBrandId, setCurrentDeletedBrandId] = React.useState<string | null>(null)
 
-  const getAllBrandsQuery = useQuery({
-    queryKey: ['getAllBrands'],
-    queryFn: () => brandsApis.getAllBrands()
-  })
+  const { getAllBrandsQuery, allBrands, totalBrand } = useAllBrands()
 
-  const allBrands = React.useMemo(
-    () => getAllBrandsQuery.data?.data.data.brands || [],
-    [getAllBrandsQuery.data?.data.data.brands]
-  )
-  const totalBrand = React.useMemo(
-    () => getAllBrandsQuery.data?.data.data.pagination.totalRows || 0,
-    [getAllBrandsQuery.data?.data.data.pagination.totalRows]
-  )
   const analyticCards = React.useMemo(
     () => [
       {

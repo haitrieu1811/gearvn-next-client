@@ -12,6 +12,7 @@ const PATH = {
   ADMIN_PRODUCT_CATEGORY: '/admin/product-category',
   ADMIN_BRAND: '/admin/brand',
   ADMIN_PRODUCT: '/admin/product',
+  ADMIN_PRODUCT_NEW: '/admin/product/new',
   ADMIN_PRODUCT_UPDATE: (productId: string) => `/admin/product/${productId}`,
   ADMIN_POST: '/admin/post',
   ADMIN_POST_UPDATE: (postId: string) => `/admin/post/${postId}`,

@@ -92,13 +92,13 @@ export default function AdminSidebar() {
               asChild
               variant='ghost'
               className={cn('flex justify-between w-full text-wrap h-auto', {
-                'bg-muted': isActive
+                'bg-primary pointer-events-none': isActive
               })}
             >
               <Link href={sidebarItem.href} className='text-muted-foreground'>
                 <div
                   className={cn('flex items-center space-x-3', {
-                    'text-black dark:text-white': isActive
+                    'text-background': isActive
                   })}
                 >
                   <sidebarItem.icon size={18} className='flex-shrink-0' />

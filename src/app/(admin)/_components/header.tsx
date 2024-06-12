@@ -1,13 +1,16 @@
 'use client'
 
 import Tippy from '@tippyjs/react/headless'
+import { Menu } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
+import AdminSidebar from '@/app/(admin)/_components/sidebar'
 import { ModeToggle } from '@/components/mode-toggle'
 import PopoverWrapper from '@/components/popover-wrapper'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import PATH from '@/constants/path'
 import useIsClient from '@/hooks/useIsClient'
 import { AppContext } from '@/providers/app.provider'
@@ -29,7 +32,23 @@ export default function AdminHeader() {
   ])
 
   return (
-    <header className='flex justify-end items-center px-4 py-2 sticky top-0 right-0 bg-background'>
+    <header className='flex justify-between items-center px-4 py-2 bg-background'>
+      <div className='flex items-center space-x-5'>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button size='icon' variant='outline' className='lg:hidden'>
+              <Menu />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side='left' className='max-h-screen overflow-y-auto p-0'>
+            <AdminSidebar />
+          </SheetContent>
+        </Sheet>
+        <Link href={PATH.ADMIN} className='flex lg:hidden flex-col items-end leading-none'>
+          <span className='text-xl font-bold tracking-tight'>Gearvn</span>
+          <span className='text-xs text-muted-foreground tracking-tight uppercase'>Admin</span>
+        </Link>
+      </div>
       <div className='flex items-center space-x-10'>
         <ModeToggle />
         {!!loggedUser && isClient && (

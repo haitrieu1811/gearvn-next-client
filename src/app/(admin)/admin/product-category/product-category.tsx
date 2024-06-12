@@ -1,6 +1,6 @@
 'use client'
 
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { GalleryVerticalEnd, Loader2, PlusCircle } from 'lucide-react'
 import React from 'react'
 import { toast } from 'sonner'
@@ -23,6 +23,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import useAllProductCategories from '@/hooks/useAllProductCategories'
 
 type AdminProductCategoryContext = {
   setCurrentUpdatedProductCategoryId: React.Dispatch<React.SetStateAction<string | null>>
@@ -39,19 +40,8 @@ export default function AdminProductCategory() {
   const [currentUpdatedProductCategoryId, setCurrentUpdatedProductCategoryId] = React.useState<string | null>(null)
   const [currentDeletedProductCategoryId, setCurrentDeletedProductCategoryId] = React.useState<string | null>(null)
 
-  const getAllProductCategoriesQuery = useQuery({
-    queryKey: ['getAllProductCategories'],
-    queryFn: () => productCategoriesApis.getAllProductCategories()
-  })
+  const { getAllProductCategoriesQuery, productCategories, totalProductCategory } = useAllProductCategories()
 
-  const productCategories = React.useMemo(
-    () => getAllProductCategoriesQuery.data?.data.data.productCategories || [],
-    [getAllProductCategoriesQuery.data?.data.data.productCategories]
-  )
-  const totalProductCategory = React.useMemo(
-    () => getAllProductCategoriesQuery.data?.data.data.pagination.totalRows || 0,
-    [getAllProductCategoriesQuery.data?.data.data.pagination.totalRows]
-  )
   const analyticCards = React.useMemo(
     () => [
       {

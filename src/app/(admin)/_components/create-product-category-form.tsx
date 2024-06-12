@@ -20,6 +20,7 @@ import { ProductCategoryStatus } from '@/constants/enum'
 import useUploadImage from '@/hooks/useUploadImage'
 import { CreateProductCategorySchema, createProductCategorySchema } from '@/rules/productCategories.rules'
 import { CreateProductCategoryResponse, UpdateProductCategoryResponse } from '@/types/productCategories.types'
+import { handleErrorsFromServer } from '@/lib/utils'
 
 type CreateProductCategoryFormProps = {
   productCategoryId?: string
@@ -96,6 +97,9 @@ export default function CreateProductCategoryForm({
       setThumbnailFile(null)
       queryClient.invalidateQueries({ queryKey: ['getAllProductCategories'] })
       onCreateSuccess && onCreateSuccess(data)
+    },
+    onError: (errors) => {
+      handleErrorsFromServer({ errors, form })
     }
   })
 
@@ -108,6 +112,9 @@ export default function CreateProductCategoryForm({
       thumbnailFile && setThumbnailFile(null)
       queryClient.invalidateQueries({ queryKey: ['getAllProductCategories'] })
       onUpdateSuccess && onUpdateSuccess(data)
+    },
+    onError: (errors) => {
+      handleErrorsFromServer({ errors, form })
     }
   })
 
@@ -128,13 +135,9 @@ export default function CreateProductCategoryForm({
     if (thumbnailFile) {
       const form = new FormData()
       form.append('image', thumbnailFile)
-      try {
-        const res = await uploadImageMutation.mutateAsync(form)
-        const image = res.data.data.images[0]
-        thumbnailId = image._id
-      } catch (error) {
-        console.log(error)
-      }
+      const res = await uploadImageMutation.mutateAsync(form)
+      const image = res.data.data.images[0]
+      thumbnailId = image._id
     }
     if (!isUpdateMode) {
       if (!thumbnailId) return
@@ -150,8 +153,8 @@ export default function CreateProductCategoryForm({
         {
           name: name !== productCategory?.name ? name : undefined,
           description: description !== productCategory?.description ? description : undefined,
-          orderNumber: Number(orderNumber) !== productCategory?.orderNumber ? orderNumber : undefined,
-          status: Number(status) !== productCategory?.status ? status : undefined,
+          orderNumber: Number(orderNumber) !== productCategory?.orderNumber ? Number(orderNumber) : undefined,
+          status: Number(status) !== productCategory?.status ? Number(status) : undefined,
           thumbnail: thumbnailId
         },
         isUndefined

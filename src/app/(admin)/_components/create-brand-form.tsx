@@ -142,8 +142,8 @@ export default function CreateBrandForm({ brandId, onCreateSuccess, onUpdateSucc
         {
           name: name !== brand?.name ? name : undefined,
           description: description !== brand?.description ? description : undefined,
-          orderNumber: Number(orderNumber) !== brand?.orderNumber ? orderNumber : undefined,
-          status: Number(status) !== brand?.status ? status : undefined,
+          orderNumber: Number(orderNumber) !== brand?.orderNumber ? Number(orderNumber) : undefined,
+          status: Number(status) !== brand?.status ? Number(status) : undefined,
           thumbnail: thumbnailId
         },
         isUndefined

@@ -3,24 +3,13 @@ import React from 'react'
 import AdminHeader from '@/app/(admin)/_components/header'
 import AdminSidebar from '@/app/(admin)/_components/sidebar'
 
-const SIDEBAR_WIDTH = 240
-
 export default function AdminLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <React.Fragment>
-      <aside
-        style={{
-          width: `${SIDEBAR_WIDTH}px`
-        }}
-        className='fixed inset-y-0 left-0 w-[200px] max-h-screen overflow-y-auto'
-      >
+      <aside className='fixed inset-y-0 left-0 w-[240px] max-h-screen overflow-y-auto hidden lg:block'>
         <AdminSidebar />
       </aside>
-      <div
-        style={{
-          marginLeft: `${SIDEBAR_WIDTH}px`
-        }}
-      >
+      <div className='ml-0 lg:ml-[240px]'>
         <AdminHeader />
         <main className='bg-muted min-h-screen p-5'>{children}</main>
       </div>
