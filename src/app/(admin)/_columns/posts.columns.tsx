@@ -5,24 +5,23 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-import { AdminProductContext } from '@/app/(admin)/admin/product/product'
+import { AdminPostContext } from '@/app/(admin)/admin/post/post'
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { ProductApprovalStatus, ProductStatus } from '@/constants/enum'
+import { PostApprovalStatus, PostStatus } from '@/constants/enum'
 import PATH from '@/constants/path'
-import { formatCurrency } from '@/lib/utils'
-import { ProductItem } from '@/types/products.types'
+import { PostItem } from '@/types/posts.types'
 
 export const statuses = {
-  [ProductStatus.Active]: (
+  [PostStatus.Active]: (
     <Badge variant='outline' className='border-green-500 text-green-500'>
       Đang hoạt động
     </Badge>
   ),
-  [ProductStatus.Inactive]: (
+  [PostStatus.Inactive]: (
     <Badge variant='outline' className='border-red-500 text-red-500'>
       Không hoạt động
     </Badge>
@@ -30,19 +29,19 @@ export const statuses = {
 } as const
 
 export const approvalStatuses = {
-  [ProductApprovalStatus.Approved]: (
+  [PostApprovalStatus.Approved]: (
     <Badge variant='outline' className='border-green-500 text-green-500'>
       Đã duyệt
     </Badge>
   ),
-  [ProductApprovalStatus.Unapproved]: (
+  [PostApprovalStatus.Unapproved]: (
     <Badge variant='outline' className='border-yellow-500 text-yellow-500'>
       Chưa duyệt
     </Badge>
   )
 } as const
 
-export const columns: ColumnDef<ProductItem>[] = [
+export const columns: ColumnDef<PostItem>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -66,13 +65,13 @@ export const columns: ColumnDef<ProductItem>[] = [
   },
   {
     accessorKey: 'thumbnail',
-    header: () => <div className='text-xs to-muted-foreground'>Hình đại diện</div>,
+    header: () => <div className='text-xs text-muted-foreground'>Ảnh đại diện</div>,
     cell: ({ row }) => (
       <Image
         width={100}
         height={100}
         src={row.original.thumbnail.url}
-        alt={row.original.name}
+        alt={row.original.title}
         className='object-cover rounded-lg aspect-square w-16 h-16'
       />
     ),
@@ -80,27 +79,8 @@ export const columns: ColumnDef<ProductItem>[] = [
     enableHiding: false
   },
   {
-    accessorKey: 'name',
-    header: ({ column }) => <DataTableColumnHeader column={column} title='Sản phẩm' />
-  },
-  {
-    accessorKey: 'priceAfterDiscount',
-    header: ({ column }) => <DataTableColumnHeader column={column} title='Giá hiện tại' />,
-    cell: ({ row }) => formatCurrency(row.original.priceAfterDiscount)
-  },
-  {
-    accessorKey: 'category',
-    header: () => <div className='text-xs text-muted-foreground'>Danh mục</div>,
-    cell: ({ row }) => <Badge variant='outline'>{row.original.category.name}</Badge>,
-    enableSorting: false,
-    enableHiding: false
-  },
-  {
-    accessorKey: 'brand',
-    header: () => <div className='text-xs text-muted-foreground'>Thương hiệu</div>,
-    cell: ({ row }) => <Badge variant='outline'>{row.original.brand.name}</Badge>,
-    enableSorting: false,
-    enableHiding: false
+    accessorKey: 'title',
+    header: ({ column }) => <DataTableColumnHeader column={column} title='Tiêu đề bài viết' />
   },
   {
     accessorKey: 'status',
@@ -120,7 +100,7 @@ export const columns: ColumnDef<ProductItem>[] = [
     id: 'actions',
     header: () => <div className='text-xs text-muted-foreground text-right'>Thao tác</div>,
     cell: ({ row }) => {
-      const { setCurrentDeletedProductId } = React.useContext(AdminProductContext)
+      const { setCurrentDeletedPostId } = React.useContext(AdminPostContext)
       return (
         <div className='flex justify-end'>
           <DropdownMenu>
@@ -131,9 +111,9 @@ export const columns: ColumnDef<ProductItem>[] = [
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end'>
               <DropdownMenuItem asChild>
-                <Link href={PATH.ADMIN_PRODUCT_UPDATE(row.original._id)}>Chi tiết</Link>
+                <Link href={PATH.ADMIN_POST_UPDATE(row.original._id)}>Chi tiết</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setCurrentDeletedProductId(row.original._id)}>
+              <DropdownMenuItem onClick={() => setCurrentDeletedPostId(row.original._id)}>
                 Xóa vĩnh viễn
               </DropdownMenuItem>
             </DropdownMenuContent>

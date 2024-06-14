@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { ChevronLeft, Loader2, PlusCircle, Trash2, Upload } from 'lucide-react'
+import moment from 'moment'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import React from 'react'
@@ -10,9 +11,11 @@ import { useFieldArray, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import productsApis from '@/apis/products.apis'
+import { approvalStatuses } from '@/app/(admin)/_columns/products.columns'
 import CreateBrandForm from '@/app/(admin)/_components/create-brand-form'
 import CreateProductCategoryForm from '@/app/(admin)/_components/create-product-category-form'
 import InputFile from '@/components/input-file'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -24,6 +27,7 @@ import { ProductStatus } from '@/constants/enum'
 import useAllBrands from '@/hooks/useAllBrands'
 import useAllProductCategories from '@/hooks/useAllProductCategories'
 import useUploadImage from '@/hooks/useUploadImage'
+import { convertMomentToVietnamese } from '@/lib/utils'
 import { CreateProductSchema, createProductSchema } from '@/rules/products.rules'
 import { CreateProductReqBody } from '@/types/products.types'
 
@@ -74,15 +78,15 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
   const { allBrands } = useAllBrands()
   const { uploadImageMutation } = useUploadImage()
 
-  const getProductQuery = useQuery({
+  const getProductForUpdateQuery = useQuery({
     queryKey: ['getProductForUpdate', productId],
     queryFn: () => productsApis.getProductForUpdate(productId as string),
     enabled: !!productId
   })
 
   const product = React.useMemo(
-    () => getProductQuery.data?.data.data.product,
-    [getProductQuery.data?.data.data.product]
+    () => getProductForUpdateQuery.data?.data.data.product,
+    [getProductForUpdateQuery.data?.data.data.product]
   )
 
   const form = useForm<CreateProductSchema>({
@@ -167,7 +171,7 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
     mutationFn: productsApis.updateProduct,
     onSuccess: (data) => {
       toast.success(data.data.message)
-      getProductQuery.refetch()
+      getProductForUpdateQuery.refetch()
       setThumbnailFile(null)
       setPhotoFiles([])
     }
@@ -229,7 +233,10 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
             <Button type='button' size='icon' variant='outline' className='w-8 h-8' onClick={() => router.back()}>
               <ChevronLeft size={16} />
             </Button>
-            <h1 className='text-xl tracking-tight font-semibold'>{!product ? 'Tạo sản phẩm mới' : product.name}</h1>
+            <div className='flex items-center space-x-3'>
+              <h1 className='text-xl tracking-tight font-semibold'>{!product ? 'Tạo sản phẩm mới' : product.name}</h1>
+              {product && approvalStatuses[product.approvalStatus]}
+            </div>
           </div>
           <div className='grid grid-cols-12 gap-5 mt-10'>
             <div className='col-span-3'>
@@ -499,16 +506,14 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
                   </div>
                 </CardContent>
               </Card>
-              <div className='flex justify-center items-center'>
-                <div className='space-x-2'>
-                  <Button variant='outline' type='button' size='sm' className='capitalize' onClick={handleCancel}>
-                    Hủy bỏ
-                  </Button>
-                  <Button type='submit' size='sm' disabled={isFormPending} className='capitalize'>
-                    {isFormPending && <Loader2 className='w-4 h-4 mr-2 animate-spin' />}
-                    {!isUpdateMode ? 'Tạo sản phẩm' : 'Cập nhật sản phẩm'}
-                  </Button>
-                </div>
+              <div className='flex justify-center space-x-2'>
+                <Button variant='outline' type='button' size='sm' className='capitalize' onClick={handleCancel}>
+                  Hủy bỏ
+                </Button>
+                <Button type='submit' size='sm' disabled={isFormPending} className='capitalize'>
+                  {isFormPending && <Loader2 className='w-4 h-4 mr-2 animate-spin' />}
+                  {!isUpdateMode ? 'Tạo sản phẩm' : 'Cập nhật sản phẩm'}
+                </Button>
               </div>
             </div>
             <div className='col-span-3'>
@@ -630,6 +635,45 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
                     </div>
                   </CardContent>
                 </Card>
+                {/* OTHER INFOS */}
+                {product && (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Thông tin khác</CardTitle>
+                    </CardHeader>
+                    <CardContent className='text-sm space-y-5'>
+                      <div className='space-y-2'>
+                        <div>Tạo lúc:</div>
+                        <div>
+                          {moment(product.createdAt).format('DD-MM-YYYY')} (
+                          {convertMomentToVietnamese(moment(product.createdAt).fromNow())})
+                        </div>
+                      </div>
+                      <div className='space-y-2'>
+                        <div>Cập nhật lúc:</div>
+                        <div>
+                          {moment(product.updatedAt).format('DD-MM-YYYY')} (
+                          {convertMomentToVietnamese(moment(product.updatedAt).fromNow())})
+                        </div>
+                      </div>
+                      <div className='space-y-2'>
+                        <div>Tác giả:</div>
+                        <div className='flex items-center space-x-2'>
+                          <Avatar>
+                            <AvatarImage src={product.author.avatar} />
+                            <AvatarFallback>
+                              {product.author.fullName[0].toUpperCase()}
+                              {product.author.fullName[1].toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            {product.author.email} ({product.author.fullName})
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
               </div>
             </div>
           </div>

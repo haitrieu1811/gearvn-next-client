@@ -93,3 +93,7 @@ export const formatNumberToSocialStyle = (number: number) => {
 export const rateSale = (originalPrice: number, salePrice: number) => {
   return Math.round(((originalPrice - salePrice) / originalPrice) * 100)
 }
+
+export const numberEnumToArray = (numberEnum: { [key: string]: string | number }) => {
+  return Object.values(numberEnum).filter((item) => typeof item === 'number') as number[]
+}
