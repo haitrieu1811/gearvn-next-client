@@ -10,7 +10,7 @@ export default function CustomerLayout({
   return (
     <React.Fragment>
       <CustomerHeader />
-      <main>{children}</main>
+      <main className='bg-muted min-h-screen'>{children}</main>
     </React.Fragment>
   )
 }

@@ -1,3 +1,5 @@
+import { generateNameId } from '@/lib/utils'
+
 const PATH = {
   HOME: '/',
   LOGIN: '/login',
@@ -5,6 +7,7 @@ const PATH = {
   CART: '/cart',
   ACCOUNT: '/account',
   ACCOUNT_ORDER: '/account/order',
+  PRODUCT_DETAIL: ({ name, id }: { name: string; id: string }) => `/product/${generateNameId({ name, id })}`,
 
   ADMIN: '/admin',
   ADMIN_USER: '/admin/user',
