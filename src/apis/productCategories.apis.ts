@@ -34,6 +34,10 @@ const productCategoriesApis = {
 
   deleteProductCategory(productCategoryId: string) {
     return http.delete<OnlyMessageResponse>(`/v1/product-categories/${productCategoryId}`)
+  },
+
+  getProductCategories(params?: PaginationReqQuery) {
+    return http.get<GetProductCategoriesResponse>('/v1/product-categories', { params })
   }
 } as const
 

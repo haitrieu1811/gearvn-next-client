@@ -11,7 +11,7 @@ import {
   ShoppingBag,
   SunMoon,
   Ticket,
-  Youtube
+  Video
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -74,7 +74,7 @@ export default function CustomerHeader() {
       },
       {
         href: PATH.HOME,
-        icon: Youtube,
+        icon: Video,
         name: 'Video'
       },
       {
@@ -97,8 +97,9 @@ export default function CustomerHeader() {
   )
 
   return (
-    <header>
-      <div className='bg-main'>
+    <React.Fragment>
+      {/* HEADER */}
+      <header className='bg-main sticky top-0 inset-x-0 z-10'>
         <div className='max-w-6xl mx-auto py-4 flex justify-between items-center space-x-4'>
           <Link href={PATH.HOME}>
             <Image width={140} height={140} src={'/white-logo.svg'} alt='Logo' />
@@ -137,7 +138,7 @@ export default function CustomerHeader() {
           </div>
           <CustomerHeaderAuth />
         </div>
-      </div>
+      </header>
       {/* SUBMENU */}
       <div className='bg-background shadow-sm'>
         <div className='flex max-w-6xl mx-auto'>
@@ -153,6 +154,6 @@ export default function CustomerHeader() {
           ))}
         </div>
       </div>
-    </header>
+    </React.Fragment>
   )
 }

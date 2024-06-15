@@ -216,7 +216,8 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
       priceAfterDiscount: Number(data.priceAfterDiscount),
       status: Number(data.status),
       thumbnail: thumbnailId,
-      photos: photoIdsConfig
+      photos: photoIdsConfig,
+      specifications: data.specifications && data.specifications.length > 0 ? data.specifications : undefined
     }
     if (!isUpdateMode) {
       createProductMutation.mutate(body)

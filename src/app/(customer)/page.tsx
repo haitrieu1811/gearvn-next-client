@@ -1,11 +1,5 @@
-import { ModeToggle } from '@/components/mode-toggle'
-import { Button } from '@/components/ui/button'
+import Home from '@/app/(customer)/home'
 
 export default function HomePage() {
-  return (
-    <>
-      <ModeToggle />
-      <Button className='bg-main hover:bg-main-foreground'>Click me</Button>
-    </>
-  )
+  return <Home />
 }
