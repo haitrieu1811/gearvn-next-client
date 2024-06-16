@@ -5,7 +5,13 @@ export type LoggedUser = {
   _id: string
   email: string
   fullName: string
-  avatar: string
+  avatar:
+    | {
+        _id: string
+        url: string
+      }
+    | ''
+  phoneNumber: string
   type: UserType
   gender: Gender
   status: UserStatus
@@ -49,6 +55,13 @@ export type CreateUserReqBody = {
   type: UserType
 }
 
+export type UpdateMeReqBody = {
+  fullName?: string
+  avatar?: string
+  gender?: Gender
+  phoneNumber?: string
+}
+
 export type GetAllUsersResponse = SuccessResponse<{
   users: UserItem[]
   analytics: {
@@ -74,4 +87,12 @@ export type CreateUserResponse = SuccessResponse<{
     createdAt: string
     updatedAt: string
   }
+}>
+
+export type GetMeResponse = SuccessResponse<{
+  me: LoggedUser
+}>
+
+export type UpdateMeResponse = SuccessResponse<{
+  user: LoggedUser
 }>

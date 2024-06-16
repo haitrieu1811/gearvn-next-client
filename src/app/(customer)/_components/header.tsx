@@ -102,7 +102,7 @@ export default function CustomerHeader() {
       <header className='bg-main sticky top-0 inset-x-0 z-10'>
         <div className='max-w-6xl mx-auto py-4 flex justify-between items-center space-x-4'>
           <Link href={PATH.HOME}>
-            <Image width={140} height={140} src={'/white-logo.svg'} alt='Logo' />
+            <Image priority width={140} height={140} src={'/white-logo.svg'} alt='Logo' />
           </Link>
           <div className='flex items-center space-x-3 text-white bg-main-foreground px-2 h-10 rounded-md'>
             <AlignJustify size={18} />

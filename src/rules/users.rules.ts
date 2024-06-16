@@ -1,7 +1,7 @@
 import z from 'zod'
 
 import { Gender, UserType } from '@/constants/enum'
-import { EMAIL_REGEX } from '@/constants/regex'
+import { EMAIL_REGEX, PHONE_NUMBER_REGEX } from '@/constants/regex'
 
 export const userSchema = z.object({
   email: z.string().min(1, 'Email là bắt buộc.').regex(EMAIL_REGEX, 'Email không hợp lệ.'),
@@ -13,7 +13,8 @@ export const userSchema = z.object({
   }),
   type: z.enum([UserType.Staff.toString(), UserType.Customer.toString()], {
     message: 'Giới tính không hợp lệ.'
-  })
+  }),
+  phoneNumber: z.string().regex(PHONE_NUMBER_REGEX, 'Số điện thoại không hợp lệ.')
 })
 
 export const loginSchema = userSchema.pick({
@@ -35,5 +36,12 @@ export const createUserSchema = userSchema
     path: ['confirmPassword']
   })
 
+export const updateMeSchema = userSchema.pick({
+  fullName: true,
+  phoneNumber: true,
+  gender: true
+})
+
 export type LoginSchema = z.infer<typeof loginSchema>
 export type CreateUserSchema = z.infer<typeof createUserSchema>
+export type UpdateMeSchema = z.infer<typeof updateMeSchema>
