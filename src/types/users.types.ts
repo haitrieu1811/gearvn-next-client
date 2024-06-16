@@ -55,6 +55,13 @@ export type CreateUserReqBody = {
   type: UserType
 }
 
+export type RegisterReqBody = {
+  email: string
+  fullName: string
+  password: string
+  confirmPassword: string
+}
+
 export type UpdateMeReqBody = {
   fullName?: string
   avatar?: string

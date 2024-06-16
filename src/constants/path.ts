@@ -8,6 +8,7 @@ const PATH = {
   ACCOUNT: '/account',
   ACCOUNT_ORDER: '/account/order',
   ACCOUNT_ADDRESS: '/account/address',
+  ACCOUNT_PASSWORD: '/account/password',
   PRODUCT_DETAIL: ({ name, id }: { name: string; id: string }) => `/product/${generateNameId({ name, id })}`,
   POST_DETAIL: ({ name, id }: { name: string; id: string }) => `/post/${generateNameId({ name, id })}`,
 

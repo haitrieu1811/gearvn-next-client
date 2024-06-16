@@ -22,6 +22,18 @@ export const loginSchema = userSchema.pick({
   password: true
 })
 
+export const registerSchema = userSchema
+  .pick({
+    fullName: true,
+    email: true,
+    password: true,
+    confirmPassword: true
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Nhập lại mật khẩu không chính xác.',
+    path: ['confirmPassword']
+  })
+
 export const createUserSchema = userSchema
   .pick({
     email: true,
@@ -45,3 +57,4 @@ export const updateMeSchema = userSchema.pick({
 export type LoginSchema = z.infer<typeof loginSchema>
 export type CreateUserSchema = z.infer<typeof createUserSchema>
 export type UpdateMeSchema = z.infer<typeof updateMeSchema>
+export type RegisterSchema = z.infer<typeof registerSchema>

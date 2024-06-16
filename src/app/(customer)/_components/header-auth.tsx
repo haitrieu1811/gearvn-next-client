@@ -4,6 +4,7 @@ import Link from 'next/link'
 import React from 'react'
 
 import LoginForm from '@/app/(customer)/_components/login-form'
+import RegisterForm from '@/app/(customer)/_components/register-form'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { UserType } from '@/constants/enum'
@@ -21,6 +22,7 @@ type UserActionRef = {
 
 export default function CustomerHeaderAuth() {
   const [isShowLoginDialog, setIsShowLoginDialog] = React.useState<boolean>(false)
+  const [isShowRegisterDialog, setIsShowRegisterDialog] = React.useState<boolean>(false)
 
   const { loggedUser } = React.useContext(AppContext)
 
@@ -48,6 +50,7 @@ export default function CustomerHeaderAuth() {
 
   return (
     <React.Fragment>
+      {/* LOGIN DIALOG */}
       <Dialog open={isShowLoginDialog} onOpenChange={(value) => setIsShowLoginDialog(value)}>
         <DialogContent>
           <DialogHeader>
@@ -61,7 +64,16 @@ export default function CustomerHeaderAuth() {
           />
         </DialogContent>
       </Dialog>
-
+      {/* REGISTER DIALOG */}
+      <Dialog open={isShowRegisterDialog} onOpenChange={(value) => setIsShowRegisterDialog(value)}>
+        <DialogContent className='max-h-screen overflow-y-auto'>
+          <DialogHeader>
+            <DialogTitle>Đăng ký</DialogTitle>
+            <DialogDescription>Nhập thông tin bên dưới để đăng ký tài khoản.</DialogDescription>
+          </DialogHeader>
+          <RegisterForm onSuccess={() => setIsShowRegisterDialog(false)} />
+        </DialogContent>
+      </Dialog>
       <Tippy
         interactive
         placement='bottom-end'
@@ -83,7 +95,7 @@ export default function CustomerHeaderAuth() {
                 <Button className='flex-auto uppercase' onClick={() => setIsShowLoginDialog(true)}>
                   Đăng nhập
                 </Button>
-                <Button variant='outline' className='flex-auto uppercase'>
+                <Button variant='outline' className='flex-auto uppercase' onClick={() => setIsShowRegisterDialog(true)}>
                   Đăng ký
                 </Button>
               </div>

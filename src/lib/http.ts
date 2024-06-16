@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, HttpStatusCode, InternalAxiosRequestConfig } from 'axios'
 import { toast } from 'sonner'
 
-import { LOGIN_URL, LOGOUT_URL, REFRESH_TOKEN_URL, UPDATE_ME_URL } from '@/apis/users.apis'
+import { LOGIN_URL, LOGOUT_URL, REFRESH_TOKEN_URL, REGISTER_URL, UPDATE_ME_URL } from '@/apis/users.apis'
 import {
   getAccessTokenFromLS,
   getLoggedUserFromLS,
@@ -50,7 +50,12 @@ class Http {
     this.instance.interceptors.response.use(
       (response) => {
         const { url, method } = response.config
-        if (url && method && [LOGIN_URL, UPDATE_ME_URL].includes(url) && ['patch', 'post'].includes(method)) {
+        if (
+          url &&
+          method &&
+          [LOGIN_URL, REGISTER_URL, UPDATE_ME_URL].includes(url) &&
+          ['patch', 'post'].includes(method)
+        ) {
           const { accessToken, refreshToken, user } = (response.data as AuthResponse).data
           this.accessToken = accessToken
           this.refreshToken = refreshToken

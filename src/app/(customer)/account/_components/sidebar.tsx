@@ -1,6 +1,6 @@
 'use client'
 
-import { LogOut, LucideIcon, MapPin, NotepadText, Upload, UserRound } from 'lucide-react'
+import { Key, LogOut, LucideIcon, MapPin, NotepadText, Upload, UserRound } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
@@ -33,6 +33,11 @@ const LINKS: {
     href: PATH.ACCOUNT_ORDER,
     name: 'Quản lý đơn hàng',
     icon: NotepadText
+  },
+  {
+    href: PATH.ACCOUNT_PASSWORD,
+    name: 'Đổi mật khẩu',
+    icon: Key
   },
   {
     href: null,
@@ -95,13 +100,13 @@ export default function SidebarAccount() {
             <Component
               key={index}
               {...props}
-              className={cn('flex items-center space-x-3 px-5 py-3 w-full text-sm font-medium', {
+              className={cn('flex items-center px-5 py-3 w-full text-sm font-medium', {
                 'text-main': isActive,
                 'hover:text-main': !isActive
               })}
               onClick={item.onClick}
             >
-              <item.icon size={20} strokeWidth={1.5} className='mr-2' />
+              <item.icon size={20} strokeWidth={1.5} className='mr-3' />
               {item.name}
             </Component>
           )

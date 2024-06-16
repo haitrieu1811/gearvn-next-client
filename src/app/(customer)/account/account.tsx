@@ -11,7 +11,7 @@ import { toast } from 'sonner'
 
 import usersApis from '@/apis/users.apis'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
@@ -99,10 +99,11 @@ export default isAuth(function Account() {
     <Card className='rounded-md shadow-none border-0'>
       <CardHeader>
         <CardTitle className='text-xl'>Thông tin tài khoản</CardTitle>
+        <CardDescription>Quản lý thông tin hồ sơ để bảo mật tài khoản</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form className='space-y-8 pl-[100px] pr-[200px]' onSubmit={handleSubmit}>
+          <form className='space-y-6 pl-[100px] pr-[200px]' onSubmit={handleSubmit}>
             {/* EMAIL */}
             <div className='flex items-center space-x-5 '>
               <div className='text-sm text-right w-[100px]'>Email</div>

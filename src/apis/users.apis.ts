@@ -5,12 +5,14 @@ import {
   GetAllUsersResponse,
   GetMeResponse,
   LoginReqBody,
+  RegisterReqBody,
   UpdateMeReqBody,
   UpdateMeResponse
 } from '@/types/users.types'
 import { AuthResponse, OnlyMessageResponse } from '@/types/utils.types'
 
 export const LOGIN_URL = '/v1/users/login'
+export const REGISTER_URL = '/v1/users/register'
 export const LOGOUT_URL = '/v1/users/logout'
 export const REFRESH_TOKEN_URL = '/v1/users/refresh-token'
 export const UPDATE_ME_URL = '/v1/users/me'
@@ -18,6 +20,10 @@ export const UPDATE_ME_URL = '/v1/users/me'
 const usersApis = {
   login(body: LoginReqBody) {
     return http.post<AuthResponse>(LOGIN_URL, body)
+  },
+
+  register(body: RegisterReqBody) {
+    return http.post<AuthResponse>(REGISTER_URL, body)
   },
 
   logout(refreshToken: string) {
