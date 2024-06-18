@@ -17,23 +17,54 @@ import { CreateAddressSchema, createAddressSchema } from '@/rules/addresses.rule
 import { CreateAddressResponse } from '@/types/addresses.types'
 
 type CreateAddressFormProps = {
-  onSuccess?: (data: AxiosResponse<CreateAddressResponse, any>) => void
+  addressId?: string
+  onCreateSuccess?: (data: AxiosResponse<CreateAddressResponse, any>) => void
+  onUpdateSuccess?: (data: AxiosResponse<CreateAddressResponse, any>) => void
 }
 
-export default function CreateAddressForm({ onSuccess }: CreateAddressFormProps) {
+export default function CreateAddressForm({ addressId, onCreateSuccess, onUpdateSuccess }: CreateAddressFormProps) {
+  const isUpdateMode = !!addressId
+
+  const getAddressQuery = useQuery({
+    queryKey: ['getAddress', addressId],
+    queryFn: () => addressesApis.getAddress(addressId as string),
+    enabled: !!addressId
+  })
+
+  const address = React.useMemo(
+    () => getAddressQuery.data?.data.data.address,
+    [getAddressQuery.data?.data.data.address]
+  )
+
   const form = useForm<CreateAddressSchema>({
     resolver: zodResolver(createAddressSchema),
     defaultValues: {
       fullName: '',
       phoneNumber: '',
       provinceId: '',
-      districtId: '',
+      districtId: '20',
       wardId: '',
       streetId: '',
       detailAddress: '',
       type: ''
     }
   })
+
+  // FILL DATA INTO THE FORM (UPDATE MODE)
+  React.useEffect(() => {
+    if (!address) return
+    const { setValue } = form
+    const { fullName, phoneNumber, province, district, ward, street, detailAddress, type } = address
+    // setValue('fullName', fullName)
+    // setValue('phoneNumber', phoneNumber)
+    // setValue('provinceId', province._id)
+    // setValue('districtId', district.id)
+    // setValue('wardId', ward.id)
+    // setValue('streetId', street.id)
+    // setValue('detailAddress', detailAddress)
+    // setValue('type', type.toString())
+    form.reset({ fullName, provinceId: province._id })
+  }, [form, address])
 
   const provinceId = form.watch('provinceId')
   const districtId = form.watch('districtId')
@@ -79,17 +110,19 @@ export default function CreateAddressForm({ onSuccess }: CreateAddressFormProps)
     [getStreetsQuery.data?.data.data.streets]
   )
 
-  React.useEffect(() => {
-    const { setValue } = form
-    setValue('districtId', '')
-    setValue('wardId', '')
-    setValue('streetId', '')
-  }, [form, provinceId])
+  console.log(form.watch())
 
+  // RESET VALUE WHEN CHANGE PROVINCE/DISTRICT
   React.useEffect(() => {
     const { setValue } = form
-    setValue('wardId', '')
-    setValue('streetId', '')
+    // setValue('districtId', '')
+    // setValue('wardId', '')
+    // setValue('streetId', '')
+  }, [form, provinceId])
+  React.useEffect(() => {
+    const { setValue } = form
+    // setValue('wardId', '')
+    // setValue('streetId', '')
   }, [form, districtId])
 
   const createAddressMutation = useMutation({
@@ -97,15 +130,31 @@ export default function CreateAddressForm({ onSuccess }: CreateAddressFormProps)
     mutationFn: addressesApis.createAddress,
     onSuccess: (data) => {
       toast.success(data.data.message)
-      onSuccess && onSuccess(data)
+      onCreateSuccess && onCreateSuccess(data)
     }
   })
 
+  const updateAddressMutation = useMutation({
+    mutationKey: ['updateAddress'],
+    mutationFn: addressesApis.updateAddress,
+    onSuccess: (data) => {
+      toast.success(data.data.message)
+      onUpdateSuccess && onUpdateSuccess(data)
+    }
+  })
+
+  const isFormPending = createAddressMutation.isPending || updateAddressMutation.isPending
+
   const handleSubmit = form.handleSubmit((data) => {
-    createAddressMutation.mutate({
+    const body = {
       ...data,
       type: Number(data.type)
-    })
+    }
+    if (!isUpdateMode) {
+      createAddressMutation.mutate(body)
+      return
+    }
+    updateAddressMutation.mutate({ body, addressId })
   })
 
   return (
@@ -154,7 +203,7 @@ export default function CreateAddressForm({ onSuccess }: CreateAddressFormProps)
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Tỉnh/thành phố</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder='Chọn tỉnh/thành phố' />
@@ -181,7 +230,7 @@ export default function CreateAddressForm({ onSuccess }: CreateAddressFormProps)
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Quận/huyện</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder='Chọn quận huyện' />
@@ -210,7 +259,7 @@ export default function CreateAddressForm({ onSuccess }: CreateAddressFormProps)
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Phường/xã</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder='Chọn phường/xã' />
@@ -237,7 +286,7 @@ export default function CreateAddressForm({ onSuccess }: CreateAddressFormProps)
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Tên đường</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder='Chọn tên đường' />
@@ -282,6 +331,7 @@ export default function CreateAddressForm({ onSuccess }: CreateAddressFormProps)
                 <RadioGroup
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  value={field.value}
                   className='flex flex-col space-y-1'
                 >
                   {[
@@ -312,9 +362,9 @@ export default function CreateAddressForm({ onSuccess }: CreateAddressFormProps)
           )}
         />
         {/* SUBMIT */}
-        <Button type='submit' disabled={createAddressMutation.isPending} className='w-full uppercase'>
-          {createAddressMutation.isPending && <Loader2 className='w-4 h-4 mr-2 animate-spin' />}
-          Thêm địa chỉ
+        <Button type='submit' disabled={isFormPending} className='w-full uppercase'>
+          {isFormPending && <Loader2 className='w-4 h-4 mr-2 animate-spin' />}
+          {!isUpdateMode ? 'Thêm địa chỉ' : 'Cập nhật địa chỉ'}
         </Button>
       </form>
     </Form>

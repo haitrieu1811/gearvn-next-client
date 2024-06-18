@@ -82,9 +82,9 @@ export default function Home() {
           </div>
         </div>
         {/* PRODUCTS */}
-        <Card>
+        <Card className='shadow-none border-none rounded-md'>
           <CardHeader>
-            <CardTitle className='text-xl'>Sản phẩm nổi bật</CardTitle>
+            <CardTitle className='text-2xl'>Sản phẩm nổi bật</CardTitle>
           </CardHeader>
           <CardContent>
             <div className='grid grid-cols-10 gap-2'>
@@ -97,9 +97,9 @@ export default function Home() {
           </CardContent>
         </Card>
         {/* POSTS */}
-        <Card>
+        <Card className='shadow-none border-none rounded-md'>
           <CardHeader>
-            <CardTitle className='text-xl'>Tin tức công nghệ</CardTitle>
+            <CardTitle className='text-2xl'>Tin tức công nghệ</CardTitle>
           </CardHeader>
           <CardContent>
             <div className='grid grid-cols-12 gap-2'>
