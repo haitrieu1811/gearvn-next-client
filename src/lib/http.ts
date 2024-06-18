@@ -1,7 +1,14 @@
 import axios, { AxiosInstance, HttpStatusCode, InternalAxiosRequestConfig } from 'axios'
 import { toast } from 'sonner'
 
-import { LOGIN_URL, LOGOUT_URL, REFRESH_TOKEN_URL, REGISTER_URL, UPDATE_ME_URL } from '@/apis/users.apis'
+import {
+  LOGIN_URL,
+  LOGOUT_URL,
+  REFRESH_TOKEN_URL,
+  REGISTER_URL,
+  UPDATE_ME_URL,
+  VERIFY_EMAIL_URL
+} from '@/apis/users.apis'
 import {
   getAccessTokenFromLS,
   getLoggedUserFromLS,
@@ -53,7 +60,7 @@ class Http {
         if (
           url &&
           method &&
-          [LOGIN_URL, REGISTER_URL, UPDATE_ME_URL].includes(url) &&
+          [LOGIN_URL, REGISTER_URL, UPDATE_ME_URL, VERIFY_EMAIL_URL].includes(url) &&
           ['patch', 'post'].includes(method)
         ) {
           const { accessToken, refreshToken, user } = (response.data as AuthResponse).data
@@ -83,7 +90,7 @@ class Http {
           const config = error.response?.config || ({ headers: {} } as InternalAxiosRequestConfig)
           const { url } = config
           // When the access token expires and there is no request from a refresh access token
-          if (isExpiredError(error) && url && ![REFRESH_TOKEN_URL].includes(url)) {
+          if (isExpiredError(error) && url && ![REFRESH_TOKEN_URL, VERIFY_EMAIL_URL].includes(url)) {
             this.refreshTokenRequest = this.refreshTokenRequest
               ? this.refreshTokenRequest
               : this.handleRefreshToken().finally(() => {
@@ -100,10 +107,12 @@ class Http {
               })
             })
           }
-          resetAuthLS()
-          this.accessToken = null
-          this.refreshToken = null
-          this.loggedUser = null
+          if (url && ![VERIFY_EMAIL_URL].includes(url)) {
+            resetAuthLS()
+            this.accessToken = null
+            this.refreshToken = null
+            this.loggedUser = null
+          }
           const errorMessage = error.response?.data.errors?.message || error.response?.data.message
           if (errorMessage) {
             toast.error(errorMessage)

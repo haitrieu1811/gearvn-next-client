@@ -4,18 +4,19 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import isUndefined from 'lodash/isUndefined'
 import omitBy from 'lodash/omitBy'
-import { Loader2 } from 'lucide-react'
+import { Loader2, TriangleAlert } from 'lucide-react'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import usersApis from '@/apis/users.apis'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Gender } from '@/constants/enum'
+import { Gender, UserVerifyStatus } from '@/constants/enum'
 import isAuth from '@/hocs/isAuth'
 import useIsClient from '@/hooks/useIsClient'
 import useUploadImage from '@/hooks/useUploadImage'
@@ -95,13 +96,41 @@ export default isAuth(function Account() {
     updateMeMutation.mutate(body)
   })
 
+  const resendEmailVerifyMutation = useMutation({
+    mutationKey: ['resendEmalVerify'],
+    mutationFn: usersApis.resendEmailVerify,
+    onSuccess: (data) => {
+      toast.success(data.data.message)
+    }
+  })
+
   return (
     <Card className='rounded-md shadow-none border-0'>
       <CardHeader>
-        <CardTitle className='text-xl'>Thông tin tài khoản</CardTitle>
+        <CardTitle className='text-2xl'>Thông tin tài khoản</CardTitle>
         <CardDescription>Quản lý thông tin hồ sơ để bảo mật tài khoản</CardDescription>
       </CardHeader>
       <CardContent>
+        {me?.verify === UserVerifyStatus.Unverified && (
+          <Alert className='mb-5 border-yellow-600 text-yellow-600'>
+            <TriangleAlert className='h-4 w-4 stroke-yellow-600' />
+            <AlertTitle>Cảnh báo!</AlertTitle>
+            <AlertDescription>
+              Tài khoản của bạn chưa được xác minh. Kiểm tra mail <span className='font-semibold'>{me?.email}</span> để
+              xác minh. Nếu mail xác minh đã hết hạn hoặc mất thì vui lòng chọn{' '}
+              <Button
+                size='sm'
+                variant='link'
+                disabled={resendEmailVerifyMutation.isPending}
+                className='px-1 h-auto'
+                onClick={() => resendEmailVerifyMutation.mutate()}
+              >
+                {resendEmailVerifyMutation.isPending && <Loader2 className='w-3 h-3 mr-2 animate-spin' />}
+                Gửi lại mail xác minh
+              </Button>
+            </AlertDescription>
+          </Alert>
+        )}
         <Form {...form}>
           <form className='space-y-6 pl-[100px] pr-[200px]' onSubmit={handleSubmit}>
             {/* EMAIL */}
