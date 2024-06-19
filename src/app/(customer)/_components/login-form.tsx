@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import usersApis from '@/apis/users.apis'
+import InputPassword from '@/components/input-password'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
@@ -74,7 +75,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
             <FormItem>
               <FormLabel>Mật khẩu</FormLabel>
               <FormControl>
-                <Input type='password' {...field} />
+                <InputPassword {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

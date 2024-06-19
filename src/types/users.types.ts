@@ -69,6 +69,12 @@ export type UpdateMeReqBody = {
   phoneNumber?: string
 }
 
+export type ChangePasswordReqBody = {
+  oldPassword: string
+  password: string
+  confirmPassword: string
+}
+
 export type GetAllUsersResponse = SuccessResponse<{
   users: UserItem[]
   analytics: {

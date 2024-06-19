@@ -1,5 +1,6 @@
 import http from '@/lib/http'
 import {
+  ChangePasswordReqBody,
   CreateUserReqBody,
   GetAllUsersReqQuery,
   GetAllUsersResponse,
@@ -53,6 +54,10 @@ const usersApis = {
 
   resendEmailVerify() {
     return http.post<OnlyMessageResponse>('/v1/users/resend-email-verify')
+  },
+
+  changePassword(body: ChangePasswordReqBody) {
+    return http.post<OnlyMessageResponse>('/v1/users/change-password', body)
   }
 } as const
 

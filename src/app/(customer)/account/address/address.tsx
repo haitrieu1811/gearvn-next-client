@@ -22,8 +22,9 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
+import isAuth from '@/hocs/isAuth'
 
-export default function AccountAddress() {
+export default isAuth(function AccountAddress() {
   const [isOpenCreateAddressDialog, setIsOpenCreateAddressDialog] = React.useState<boolean>(false)
   const [currentDeletedAddressId, setCurrentDeletedAddressId] = React.useState<string | null>(null)
   const [currentUpdatedAddressId, setCurrentUpdatedAddressId] = React.useState<string | null>(null)
@@ -191,4 +192,4 @@ export default function AccountAddress() {
       </AlertDialog>
     </React.Fragment>
   )
-}
+})

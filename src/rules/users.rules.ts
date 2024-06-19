@@ -54,7 +54,21 @@ export const updateMeSchema = userSchema.pick({
   gender: true
 })
 
+export const changePasswordSchema = userSchema
+  .pick({
+    password: true,
+    confirmPassword: true
+  })
+  .extend({
+    oldPassword: z.string().min(1, 'Mật khẩu cũ là bắt buộc.')
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Nhập lại mật khẩu không chính xác.',
+    path: ['confirmPassword']
+  })
+
 export type LoginSchema = z.infer<typeof loginSchema>
 export type CreateUserSchema = z.infer<typeof createUserSchema>
 export type UpdateMeSchema = z.infer<typeof updateMeSchema>
 export type RegisterSchema = z.infer<typeof registerSchema>
+export type ChangePasswordSchema = z.infer<typeof changePasswordSchema>
