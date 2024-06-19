@@ -63,7 +63,7 @@ export default isAuth(function AccountAddress() {
 
   return (
     <React.Fragment>
-      <Card className='rounded-md shadow-none border-0'>
+      <Card>
         <CardHeader className='flex-row space-y-0 justify-between items-center'>
           <CardTitle className='text-2xl'>Số địa chỉ</CardTitle>
           <Button size='sm' onClick={() => setIsOpenCreateAddressDialog(true)}>

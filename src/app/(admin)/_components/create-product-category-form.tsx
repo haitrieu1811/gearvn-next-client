@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AxiosResponse } from 'axios'
 import isUndefined from 'lodash/isUndefined'
 import omitBy from 'lodash/omitBy'
@@ -17,10 +17,11 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { ProductCategoryStatus } from '@/constants/enum'
+import useProductCategory from '@/hooks/useProductCategory'
 import useUploadImage from '@/hooks/useUploadImage'
+import { handleErrorsFromServer } from '@/lib/utils'
 import { CreateProductCategorySchema, createProductCategorySchema } from '@/rules/productCategories.rules'
 import { CreateProductCategoryResponse, UpdateProductCategoryResponse } from '@/types/productCategories.types'
-import { handleErrorsFromServer } from '@/lib/utils'
 
 type CreateProductCategoryFormProps = {
   productCategoryId?: string
@@ -61,16 +62,7 @@ export default function CreateProductCategoryForm({
     }
   })
 
-  const getProductCategoryByIdQuery = useQuery({
-    queryKey: ['getProductCategoryId', productCategoryId],
-    queryFn: () => productCategoriesApis.getProductCategoryById(productCategoryId as string),
-    enabled: !!productCategoryId
-  })
-
-  const productCategory = React.useMemo(
-    () => getProductCategoryByIdQuery.data?.data.data.productCategory,
-    [getProductCategoryByIdQuery.data?.data.data.productCategory]
-  )
+  const { getProductCategoryByIdQuery, productCategory } = useProductCategory(productCategoryId)
 
   // HANDLE FILL DATA INTO THE FORM
   const handleFillDataInTheForm = React.useCallback(() => {

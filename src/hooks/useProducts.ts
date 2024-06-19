@@ -9,16 +9,24 @@ type UseProductsProps = GetProductsReqQuery & {
 }
 
 export default function useProducts({
+  page,
+  limit,
   name,
   brandId,
   categoryId,
   highestPrice,
   lowestPrice,
+  sortBy,
+  orderBy,
   enabled = true
 }: UseProductsProps) {
   const getPublicProductsQuery = useQuery({
-    queryKey: ['getPublicProducts', { name, brandId, categoryId, highestPrice, lowestPrice }],
-    queryFn: () => productsApis.getProducts({ name, brandId, categoryId, highestPrice, lowestPrice }),
+    queryKey: [
+      'getPublicProducts',
+      { page, limit, name, brandId, categoryId, highestPrice, lowestPrice, sortBy, orderBy }
+    ],
+    queryFn: () =>
+      productsApis.getProducts({ page, limit, name, brandId, categoryId, highestPrice, lowestPrice, sortBy, orderBy }),
     enabled
   })
 

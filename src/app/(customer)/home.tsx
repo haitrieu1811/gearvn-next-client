@@ -1,7 +1,9 @@
 'use client'
 
 import Autoplay from 'embla-carousel-autoplay'
+import { Loader2 } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 import MegaMenu from '@/app/(customer)/_components/mega-menu'
 import banner1 from '@/assets/images/banner1.webp'
@@ -16,8 +18,10 @@ import carousel4 from '@/assets/images/carousel4.webp'
 import carousel5 from '@/assets/images/carousel5.webp'
 import PostItem from '@/components/post-item'
 import ProductItem from '@/components/product-item'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
+import PATH from '@/constants/path'
 import usePosts from '@/hooks/usePosts'
 import useProducts from '@/hooks/useProducts'
 
@@ -25,8 +29,8 @@ const carousels = [carousel1, carousel2, carousel3, carousel4, carousel5] as con
 const banners = [banner1, banner2, banner3, banner4, banner5] as const
 
 export default function Home() {
-  const { products } = useProducts({})
-  const { posts } = usePosts({})
+  const { products, getPublicProductsQuery } = useProducts({})
+  const { posts, getPublicPostsQuery } = usePosts({})
 
   return (
     <div className='pt-2.5 pb-5'>
@@ -82,9 +86,12 @@ export default function Home() {
           </div>
         </div>
         {/* PRODUCTS */}
-        <Card className='shadow-none border-none rounded-md'>
-          <CardHeader>
+        <Card>
+          <CardHeader className='flex-row justify-between items-center space-y-0'>
             <CardTitle className='text-2xl'>Sản phẩm nổi bật</CardTitle>
+            <Button asChild variant='link' className='p-0'>
+              <Link href={PATH.PRODUCT}>Xem tất cả</Link>
+            </Button>
           </CardHeader>
           <CardContent>
             <div className='grid grid-cols-10 gap-2'>
@@ -94,10 +101,15 @@ export default function Home() {
                 </div>
               ))}
             </div>
+            {getPublicProductsQuery.isLoading && (
+              <div className='flex justify-center'>
+                <Loader2 size={50} strokeWidth={1} className='animate-spin stroke-main' />
+              </div>
+            )}
           </CardContent>
         </Card>
         {/* POSTS */}
-        <Card className='shadow-none border-none rounded-md'>
+        <Card>
           <CardHeader>
             <CardTitle className='text-2xl'>Tin tức công nghệ</CardTitle>
           </CardHeader>
@@ -109,6 +121,11 @@ export default function Home() {
                 </div>
               ))}
             </div>
+            {getPublicPostsQuery.isLoading && (
+              <div className='flex justify-center'>
+                <Loader2 size={50} strokeWidth={1} className='animate-spin stroke-main' />
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>

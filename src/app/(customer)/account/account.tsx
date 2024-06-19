@@ -105,7 +105,7 @@ export default isAuth(function Account() {
   })
 
   return (
-    <Card className='rounded-md shadow-none border-0'>
+    <Card>
       <CardHeader>
         <CardTitle className='text-2xl'>Thông tin tài khoản</CardTitle>
         <CardDescription>Quản lý thông tin hồ sơ để bảo mật tài khoản</CardDescription>

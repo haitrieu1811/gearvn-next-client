@@ -1,5 +1,5 @@
 import { ProductApprovalStatus, ProductStatus } from '@/constants/enum'
-import { Pagination, SuccessResponse } from '@/types/utils.types'
+import { Pagination, PaginationReqQuery, SuccessResponse } from '@/types/utils.types'
 
 type SpecificationItem = {
   _id: string
@@ -92,12 +92,17 @@ export type CreateProductReqBody = {
   status?: ProductStatus
 }
 
-export type GetProductsReqQuery = {
+export type SortByProduct = 'priceAfterDiscount' | 'name'
+export type OrderByProduct = 'asc' | 'desc'
+
+export type GetProductsReqQuery = PaginationReqQuery & {
   categoryId?: string
   brandId?: string
   name?: string
   lowestPrice?: string
   highestPrice?: string
+  sortBy?: SortByProduct
+  orderBy?: OrderByProduct
 }
 
 export type CreateProductResponse = SuccessResponse<{

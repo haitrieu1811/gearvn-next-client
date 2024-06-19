@@ -42,7 +42,7 @@ export default isAuth(function AccountPassword() {
   })
 
   return (
-    <Card className='rounded-md shadow-none border-none'>
+    <Card>
       <CardHeader>
         <CardTitle className='text-2xl'>Đổi mật khẩu</CardTitle>
         <CardDescription>Để bảo mật tài khoản, vui lòng không chia sẻ mật khẩu cho người khác</CardDescription>
