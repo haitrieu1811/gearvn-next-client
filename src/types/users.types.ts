@@ -75,6 +75,12 @@ export type ChangePasswordReqBody = {
   confirmPassword: string
 }
 
+export type ResetPasswordReqBody = {
+  forgotPasswordToken: string
+  password: string
+  confirmPassword: string
+}
+
 export type GetAllUsersResponse = SuccessResponse<{
   users: UserItem[]
   analytics: {

@@ -7,6 +7,7 @@ import {
   GetMeResponse,
   LoginReqBody,
   RegisterReqBody,
+  ResetPasswordReqBody,
   UpdateMeReqBody,
   UpdateMeResponse
 } from '@/types/users.types'
@@ -18,6 +19,7 @@ export const LOGOUT_URL = '/v1/users/logout'
 export const REFRESH_TOKEN_URL = '/v1/users/refresh-token'
 export const UPDATE_ME_URL = '/v1/users/me'
 export const VERIFY_EMAIL_URL = '/v1/users/verify-email'
+export const RESET_PASSWORD_URL = '/v1/users/reset-password'
 
 const usersApis = {
   login(body: LoginReqBody) {
@@ -58,6 +60,14 @@ const usersApis = {
 
   changePassword(body: ChangePasswordReqBody) {
     return http.post<OnlyMessageResponse>('/v1/users/change-password', body)
+  },
+
+  forgotPassword(email: string) {
+    return http.post<OnlyMessageResponse>('/v1/users/forgot-password', { email })
+  },
+
+  resetPassword(body: ResetPasswordReqBody) {
+    return http.post<AuthResponse>(RESET_PASSWORD_URL, body)
   }
 } as const
 

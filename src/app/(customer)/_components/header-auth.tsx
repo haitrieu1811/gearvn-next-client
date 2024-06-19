@@ -1,8 +1,9 @@
 import Tippy from '@tippyjs/react/headless'
-import { BarChartBig, Eye, Hand, LogOut, LucideIcon, NotepadText, UserRound } from 'lucide-react'
+import { BarChartBig, CircleHelp, Eye, Hand, LogOut, LucideIcon, NotepadText, UserRound } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
+import ForgotPasswordForm from '@/app/(customer)/_components/forgot-password-form'
 import LoginForm from '@/app/(customer)/_components/login-form'
 import RegisterForm from '@/app/(customer)/_components/register-form'
 import { Button } from '@/components/ui/button'
@@ -23,6 +24,7 @@ type UserActionRef = {
 export default function CustomerHeaderAuth() {
   const [isShowLoginDialog, setIsShowLoginDialog] = React.useState<boolean>(false)
   const [isShowRegisterDialog, setIsShowRegisterDialog] = React.useState<boolean>(false)
+  const [isShowForgotPasswordDialog, setIsShowForgotPasswordDialog] = React.useState<boolean>(false)
 
   const { loggedUser } = React.useContext(AppContext)
 
@@ -50,30 +52,6 @@ export default function CustomerHeaderAuth() {
 
   return (
     <React.Fragment>
-      {/* LOGIN DIALOG */}
-      <Dialog open={isShowLoginDialog} onOpenChange={(value) => setIsShowLoginDialog(value)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Đăng nhập</DialogTitle>
-            <DialogDescription>Nhập thông tin tài khoản bên dưới để đăng nhập vào hệ thống.</DialogDescription>
-          </DialogHeader>
-          <LoginForm
-            onSuccess={() => {
-              setIsShowLoginDialog(false)
-            }}
-          />
-        </DialogContent>
-      </Dialog>
-      {/* REGISTER DIALOG */}
-      <Dialog open={isShowRegisterDialog} onOpenChange={(value) => setIsShowRegisterDialog(value)}>
-        <DialogContent className='max-h-screen overflow-y-auto'>
-          <DialogHeader>
-            <DialogTitle>Đăng ký</DialogTitle>
-            <DialogDescription>Nhập thông tin bên dưới để đăng ký tài khoản.</DialogDescription>
-          </DialogHeader>
-          <RegisterForm onSuccess={() => setIsShowRegisterDialog(false)} />
-        </DialogContent>
-      </Dialog>
       <Tippy
         interactive
         placement='bottom-end'
@@ -91,13 +69,25 @@ export default function CustomerHeaderAuth() {
               )}
             </div>
             {!loggedUser && (
-              <div className='flex space-x-3 mt-6 px-4 pb-4'>
-                <Button className='flex-auto uppercase' onClick={() => setIsShowLoginDialog(true)}>
-                  Đăng nhập
-                </Button>
-                <Button variant='outline' className='flex-auto uppercase' onClick={() => setIsShowRegisterDialog(true)}>
-                  Đăng ký
-                </Button>
+              <div className='mt-6 px-4 space-y-2'>
+                <div className='flex space-x-3'>
+                  <Button className='flex-auto uppercase' onClick={() => setIsShowLoginDialog(true)}>
+                    Đăng nhập
+                  </Button>
+                  <Button
+                    variant='outline'
+                    className='flex-auto uppercase'
+                    onClick={() => setIsShowRegisterDialog(true)}
+                  >
+                    Đăng ký
+                  </Button>
+                </div>
+                <div className='pb-1'>
+                  <Button variant='link' className='p-0' onClick={() => setIsShowForgotPasswordDialog(true)}>
+                    <CircleHelp className='w-4 h-4 mr-2' />
+                    Quên mật khẩu
+                  </Button>
+                </div>
               </div>
             )}
             {!!loggedUser && isClient && (
@@ -140,6 +130,39 @@ export default function CustomerHeaderAuth() {
           </div>
         </div>
       </Tippy>
+      {/* LOGIN DIALOG */}
+      <Dialog open={isShowLoginDialog} onOpenChange={(value) => setIsShowLoginDialog(value)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Đăng nhập</DialogTitle>
+            <DialogDescription>Nhập thông tin tài khoản bên dưới để đăng nhập vào hệ thống.</DialogDescription>
+          </DialogHeader>
+          <LoginForm
+            onSuccess={() => {
+              setIsShowLoginDialog(false)
+            }}
+          />
+        </DialogContent>
+      </Dialog>
+      {/* REGISTER DIALOG */}
+      <Dialog open={isShowRegisterDialog} onOpenChange={(value) => setIsShowRegisterDialog(value)}>
+        <DialogContent className='max-h-screen overflow-y-auto'>
+          <DialogHeader>
+            <DialogTitle>Đăng ký</DialogTitle>
+            <DialogDescription>Nhập thông tin bên dưới để đăng ký tài khoản.</DialogDescription>
+          </DialogHeader>
+          <RegisterForm onSuccess={() => setIsShowRegisterDialog(false)} />
+        </DialogContent>
+      </Dialog>
+      {/* FORGOT PASSWORD DIALOG */}
+      <Dialog open={isShowForgotPasswordDialog} onOpenChange={(value) => setIsShowForgotPasswordDialog(value)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Quên mật khẩu</DialogTitle>
+          </DialogHeader>
+          <ForgotPasswordForm onSuccess={() => setIsShowForgotPasswordDialog(false)} />
+        </DialogContent>
+      </Dialog>
     </React.Fragment>
   )
 }
