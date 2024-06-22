@@ -29,8 +29,8 @@ const carousels = [carousel1, carousel2, carousel3, carousel4, carousel5] as con
 const banners = [banner1, banner2, banner3, banner4, banner5] as const
 
 export default function Home() {
-  const { products, getPublicProductsQuery } = useProducts({})
-  const { posts, getPublicPostsQuery } = usePosts({})
+  const { products, getPublicProductsQuery } = useProducts({ limit: '5' })
+  const { posts, getPublicPostsQuery } = usePosts({ limit: '4' })
 
   return (
     <div className='pt-2.5 pb-5'>

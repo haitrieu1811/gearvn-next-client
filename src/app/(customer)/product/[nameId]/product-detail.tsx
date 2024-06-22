@@ -81,7 +81,7 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
     categoryId: product?.category._id,
     limit: '5'
   })
-  const { posts, getPublicPostsQuery } = usePosts({ limit: '5' })
+  const { posts, getPublicPostsQuery, totalPost } = usePosts({ limit: '5' })
   const isClient = useIsClient()
 
   const getReviewsByProductIdQuery = useQuery({
@@ -164,7 +164,7 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
                   <h1 className='text-2xl font-semibold tracking-tight'>{product.name}</h1>
                   <div className='flex items-center space-x-3'>
                     <div className='text-yellow-500 flex items-center'>
-                      {product.review.averageReview}
+                      {product.review.averageReview.toFixed(1)}
                       <Star size={14} className='fill-yellow-500 ml-1' />
                     </div>
                     <Link href='#review' className='text-sm text-blue-600 font-medium hover:underline'>

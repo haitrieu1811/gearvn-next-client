@@ -118,7 +118,7 @@ export default function CustomerFooter() {
               ].map((item, index) => (
                 <li key={index} className='text-sm leading-loose flex items-center space-x-2'>
                   <span>{item.text}</span>
-                  <Link href={item.href} className='text-blue-500 font-bold'>
+                  <Link href={item.href} className='text-blue-500 font-semibold'>
                     {item.linkName}
                   </Link>
                 </li>

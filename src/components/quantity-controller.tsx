@@ -10,6 +10,7 @@ type QuantityControllerProps = {
   max?: number
   disabled?: boolean
   value?: number
+  classNameButton?: string
   onChange?: (value: number) => void
   onDecrease?: (value: number) => void
   onIncrease?: (value: number) => void
@@ -20,6 +21,7 @@ export default function QuantityController({
   max,
   disabled,
   value,
+  classNameButton,
   onChange,
   onDecrease,
   onIncrease,
@@ -70,11 +72,11 @@ export default function QuantityController({
         'pointer-events-none opacity-50': disabled
       })}
     >
-      <Button size='icon' variant='secondary' className='active:bg-slate-100' onClick={handleDecrease}>
+      <Button size='icon' variant='secondary' className={classNameButton} onClick={handleDecrease}>
         <Minus size={16} />
       </Button>
-      <Input value={value || localValue} className='w-[50px] text-center' onChange={handleChange} onBlur={handleBlur} />
-      <Button size='icon' variant='secondary' className='active:bg-slate-100' onClick={handleIncrease}>
+      <Input value={value || localValue} className='text-center w-[50px]' onChange={handleChange} onBlur={handleBlur} />
+      <Button size='icon' variant='secondary' className={classNameButton} onClick={handleIncrease}>
         <Plus size={16} />
       </Button>
     </div>

@@ -136,47 +136,59 @@ export default function CustomerHeader() {
                     <span className='text-main font-semibold'>{formatCurrency(totalAmount)}&#8363;</span>
                   </div>
                 </div>
-                <div className='max-h-[350px] overflow-y-auto'>
-                  {cartItems.map((cartItem) => (
-                    <div key={cartItem._id} className='flex items-start space-x-3 px-4 py-2'>
-                      <Link
-                        href={PATH.PRODUCT_DETAIL({ name: cartItem.product.name, id: cartItem.product._id })}
-                        className='flex-shrink-0 border p-1 rounded-md overflow-hidden'
-                      >
-                        <Image
-                          width={60}
-                          height={60}
-                          src={cartItem.product.thumbnail}
-                          alt={cartItem.product.name}
-                          className='w-[60px] object-cover aspect-square'
-                        />
-                      </Link>
-                      <div className='flex-1 space-y-1'>
-                        <Link
-                          href={PATH.PRODUCT_DETAIL({ name: cartItem.product.name, id: cartItem.product._id })}
-                          className='text-sm text-muted-foreground line-clamp-2 hover:underline'
-                        >
-                          {cartItem.product.name}
-                        </Link>
-                        <div className='flex items-center space-x-1'>
-                          <div className='text-sm font-semibold'>
-                            {formatCurrency(cartItem.product.priceAfterDiscount)}&#8363;
+                {totalItems > 0 && (
+                  <React.Fragment>
+                    <div className='max-h-[350px] overflow-y-auto'>
+                      {cartItems.map((cartItem) => (
+                        <div key={cartItem._id} className='flex items-start space-x-3 px-4 py-2'>
+                          <Link
+                            href={PATH.PRODUCT_DETAIL({ name: cartItem.product.name, id: cartItem.product._id })}
+                            className='flex-shrink-0 border p-1 rounded-md overflow-hidden'
+                          >
+                            <Image
+                              width={60}
+                              height={60}
+                              src={cartItem.product.thumbnail}
+                              alt={cartItem.product.name}
+                              className='w-[60px] object-cover aspect-square'
+                            />
+                          </Link>
+                          <div className='flex-1 space-y-1'>
+                            <Link
+                              href={PATH.PRODUCT_DETAIL({ name: cartItem.product.name, id: cartItem.product._id })}
+                              className='text-sm text-muted-foreground line-clamp-2 hover:underline'
+                            >
+                              {cartItem.product.name}
+                            </Link>
+                            <div className='flex items-center space-x-1'>
+                              <div className='text-sm font-semibold'>
+                                {formatCurrency(cartItem.product.priceAfterDiscount)}&#8363;
+                              </div>
+                              <X size={14} strokeWidth={1} />
+                              <div className='text-sm text-muted-foreground'>{cartItem.quantity}</div>
+                            </div>
                           </div>
-                          <X size={14} strokeWidth={1} />
-                          <div className='text-sm text-muted-foreground'>{cartItem.quantity}</div>
                         </div>
-                      </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-                <div className='flex justify-end space-x-2 p-4 border-t'>
-                  <Button asChild variant='outline'>
-                    <Link href={PATH.CART}>Thanh toán</Link>
-                  </Button>
-                  <Button asChild>
-                    <Link href={PATH.CART}>Xem giỏ hàng</Link>
-                  </Button>
-                </div>
+                    <div className='flex justify-end space-x-2 p-4 border-t'>
+                      <Button asChild variant='outline'>
+                        <Link href={PATH.CART}>Thanh toán</Link>
+                      </Button>
+                      <Button asChild>
+                        <Link href={PATH.CART}>Xem giỏ hàng</Link>
+                      </Button>
+                    </div>
+                  </React.Fragment>
+                )}
+                {totalItems === 0 && (
+                  <div
+                    className='px-4 py-2.5
+                 text-sm'
+                  >
+                    Giỏ hàng của bạn đang trống
+                  </div>
+                )}
               </div>
             )}
           >
@@ -197,7 +209,6 @@ export default function CustomerHeader() {
               </div>
             </Link>
           </Tippy>
-
           {/* CUSTOMER AUTH */}
           <CustomerHeaderAuth />
         </div>
