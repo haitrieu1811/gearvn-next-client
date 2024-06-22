@@ -1,3 +1,4 @@
+import { Star } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -24,7 +25,7 @@ export default function ProductItem({ productData }: ProductItemProps) {
           className='w-full aspect-square rounded-md object-cover'
         />
       </Link>
-      <div className='px-3 pt-1 pb-4 space-y-1'>
+      <div className='px-3 pt-1 pb-4 space-y-2'>
         <Link href={detailLink} title={name} className='text-sm font-medium line-clamp-2 hover:underline'>
           {name}
         </Link>
@@ -40,6 +41,13 @@ export default function ProductItem({ productData }: ProductItemProps) {
               -{rateSale(originalPrice, priceAfterDiscount)}%
             </Badge>
           )}
+        </div>
+        <div className='flex items-center space-x-2'>
+          <div className='flex items-center space-x-1 text-yellow-500'>
+            <span className='text-xs font-semibold'>{productData.review.averageReview.toFixed(1)}</span>
+            <Star size={13} className='fill-yellow-500' />
+          </div>
+          <div className='text-xs text-muted-foreground'>({productData.review.totalReview} đánh giá)</div>
         </div>
       </div>
     </div>

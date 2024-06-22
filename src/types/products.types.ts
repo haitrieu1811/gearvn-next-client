@@ -29,6 +29,16 @@ export type OriginalProduct = {
   updatedAt: string
 }
 
+const a = {
+  totalReview: 1,
+  averageReview: 2,
+  totalOneStar: 0,
+  totalTwoStar: 1,
+  totalThreeStar: 0,
+  totalFourStar: 0,
+  totalFiveStar: 0
+}
+
 export type ProductItem = {
   _id: string
   name: string
@@ -70,6 +80,15 @@ export type ProductItem = {
   }
   shortDescription: string
   description: string
+  review: {
+    totalReview: number
+    averageReview: number
+    totalOneStar: number
+    totalTwoStar: number
+    totalThreeStar: number
+    totalFourStar: number
+    totalFiveStar: number
+  }
   createdAt: string
   updatedAt: string
 }

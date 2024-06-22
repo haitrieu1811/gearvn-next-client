@@ -7,9 +7,16 @@ type InputFileProps = {
   onChange?: (file?: File[]) => void
   multiple?: boolean
   maxFileSize?: number
+  className?: string
 }
 
-export default function InputFile({ children, onChange, multiple = false, maxFileSize = 300 * 1024 }: InputFileProps) {
+export default function InputFile({
+  children,
+  onChange,
+  multiple = false,
+  maxFileSize = 300 * 1024,
+  className = ''
+}: InputFileProps) {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
 
   const handleUpload = () => {
@@ -36,7 +43,9 @@ export default function InputFile({ children, onChange, multiple = false, maxFil
         onClick={(e) => ((e.target as any).value = null)}
         multiple={multiple}
       />
-      <div onClick={handleUpload}>{children}</div>
+      <div className={className} onClick={handleUpload}>
+        {children}
+      </div>
     </React.Fragment>
   )
 }
