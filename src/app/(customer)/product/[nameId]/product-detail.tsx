@@ -10,6 +10,7 @@ import { toast } from 'sonner'
 import productsApis from '@/apis/products.apis'
 import reviewsApis from '@/apis/reviews.apis'
 import ReviewDialog from '@/app/(customer)/_components/review-dialog'
+import QuantityController from '@/components/quantity-controller'
 import ReviewItem from '@/components/review-item'
 import {
   AlertDialog,
@@ -25,8 +26,10 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
+import { Label } from '@/components/ui/label'
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
 import PATH from '@/constants/path'
+import useAddProductToCart from '@/hooks/useAddProductToCart'
 import useIsClient from '@/hooks/useIsClient'
 import usePosts from '@/hooks/usePosts'
 import useProducts from '@/hooks/useProducts'
@@ -55,6 +58,7 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
   const [activePhoto, setActivePhoto] = React.useState<string | null>(null)
   const [currentUpdatedReviewId, setCurrentUpdatedReviewId] = React.useState<string | null>(null)
   const [currentDeletedReviewId, setCurrentDeletedReviewId] = React.useState<string | null>(null)
+  const [quantity, setQuantity] = React.useState<number>(1)
 
   const { isAuthenticated, loggedUser } = React.useContext(AppContext)
 
@@ -107,6 +111,12 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
     deleteReviewMutation.mutate(currentDeletedReviewId)
   }
 
+  const { handleAddProductToCart, addProductToCartMutation } = useAddProductToCart({
+    onSuccess: () => {
+      setQuantity(1)
+    }
+  })
+
   return (
     <ProductDetailContext.Provider
       value={{
@@ -149,6 +159,7 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
               </div>
               {/* INFOMATION */}
               <div className='flex-1 space-y-5'>
+                {/* NAME */}
                 <div className='space-y-1'>
                   <h1 className='text-2xl font-semibold tracking-tight'>{product.name}</h1>
                   <div className='flex items-center space-x-3'>
@@ -161,6 +172,7 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
                     </Link>
                   </div>
                 </div>
+                {/* PRICE - DISCOUNT */}
                 <div className='flex items-center space-x-3'>
                   <div className='text-3xl font-semibold text-main'>
                     {formatCurrency(product.priceAfterDiscount)}&#8363;
@@ -176,9 +188,24 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
                     </Badge>
                   )}
                 </div>
-                <Button className='flex-col h-16 px-20 bg-main hover:bg-main-foreground'>
+                {/* QUANTITY */}
+                <div className='flex items-center space-x-5'>
+                  <Label>Số lượng</Label>
+                  <QuantityController
+                    value={quantity}
+                    onChange={(value) => setQuantity(value)}
+                    onDecrease={(value) => setQuantity(value)}
+                    onIncrease={(value) => setQuantity(value)}
+                  />
+                </div>
+                {/* ADD PRODUCT TO CART */}
+                <Button
+                  disabled={addProductToCartMutation.isPending}
+                  className='flex-col h-16 px-20 bg-main hover:bg-main-foreground'
+                  onClick={() => handleAddProductToCart({ productId: product._id, quantity })}
+                >
                   <div className='flex items-center'>
-                    {false && <Loader2 size={20} className='animate-spin mr-2' />}
+                    {addProductToCartMutation.isPending && <Loader2 size={20} className='animate-spin mr-2' />}
                     <span className='uppercase text-lg'>Mua ngay</span>
                   </div>
                   <span>Giao tận nơi hoặc nhận tại cửa hàng</span>
