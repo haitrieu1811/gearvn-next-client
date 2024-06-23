@@ -5,6 +5,7 @@ import NextTopLoader from 'nextjs-toploader'
 import { Toaster } from '@/components/ui/sonner'
 import { cn } from '@/lib/utils'
 import AppProvider from '@/providers/app.provider'
+import CartProvider from '@/providers/cart.provider'
 import TanstackProvider from '@/providers/tanstack.provider'
 import { ThemeProvider } from '@/providers/theme.provider'
 import './globals.css'
@@ -16,8 +17,8 @@ const fontSans = FontSans({
 })
 
 export const metadata: Metadata = {
-  title: 'Gearvn - Trang chủ',
-  description: 'Gearvn - Trang chủ'
+  title: 'Trang chủ - Gearvn.',
+  description: 'Trang chủ - Gearvn.'
 }
 
 export default function RootLayout({
@@ -31,9 +32,11 @@ export default function RootLayout({
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
           <TanstackProvider>
             <AppProvider>
-              <NextTopLoader showSpinner={false} color='yellow' height={2} />
-              {children}
-              <Toaster richColors position='top-center' />
+              <CartProvider>
+                <NextTopLoader showSpinner={false} color='yellow' height={2} />
+                {children}
+                <Toaster richColors position='bottom-left' />
+              </CartProvider>
             </AppProvider>
           </TanstackProvider>
         </ThemeProvider>

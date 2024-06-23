@@ -110,8 +110,6 @@ export default function CreateAddressForm({ addressId, onCreateSuccess, onUpdate
     [getStreetsQuery.data?.data.data.streets]
   )
 
-  console.log(form.watch())
-
   // RESET VALUE WHEN CHANGE PROVINCE/DISTRICT
   React.useEffect(() => {
     const { setValue } = form

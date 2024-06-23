@@ -1,5 +1,5 @@
 import Tippy from '@tippyjs/react/headless'
-import { BarChartBig, CircleHelp, Eye, Hand, LogOut, LucideIcon, NotepadText, UserRound } from 'lucide-react'
+import { BarChartBig, CircleHelp, Hand, LogOut, LucideIcon, MapPin, NotepadText, UserRound } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
@@ -38,9 +38,9 @@ export default function CustomerHeaderAuth() {
       icon: NotepadText
     },
     {
-      href: PATH.HOME,
-      name: 'Đã xem gần đây',
-      icon: Eye
+      href: PATH.ACCOUNT_ADDRESS,
+      name: 'Sổ địa chỉ',
+      icon: MapPin
     },
     {
       href: null,

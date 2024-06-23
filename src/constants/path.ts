@@ -10,6 +10,9 @@ const PATH = {
   ACCOUNT_ADDRESS: '/account/address',
   ACCOUNT_PASSWORD: '/account/password',
   PRODUCT: '/product',
+  CART_ORDER_INFO: '/cart/order-info',
+  CART_ORDER_REVIEW: '/cart/order-review',
+  CART_ORDER_SUCCESS: '/cart/order-success',
   PRODUCT_DETAIL: ({ name, id }: { name: string; id: string }) => `/product/${generateNameId({ name, id })}`,
   POST_DETAIL: ({ name, id }: { name: string; id: string }) => `/post/${generateNameId({ name, id })}`,
 

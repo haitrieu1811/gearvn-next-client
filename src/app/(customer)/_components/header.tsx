@@ -23,8 +23,8 @@ import CustomerHeaderAuth from '@/app/(customer)/_components/header-auth'
 import CustomerHeaderSearch from '@/app/(customer)/_components/header-search'
 import { Button } from '@/components/ui/button'
 import PATH from '@/constants/path'
-import useMyCart from '@/hooks/useMyCart'
 import { formatCurrency } from '@/lib/utils'
+import { CartContext } from '@/providers/cart.provider'
 
 export default function CustomerHeader() {
   const headerActions = React.useMemo(
@@ -87,7 +87,7 @@ export default function CustomerHeader() {
     []
   )
 
-  const { cartItems, totalItems, totalAmount, getMycartQuery } = useMyCart()
+  const { cartItems, totalItems, totalAmount, paginationCart } = React.useContext(CartContext)
 
   return (
     <React.Fragment>
@@ -173,7 +173,7 @@ export default function CustomerHeader() {
                     </div>
                     <div className='flex justify-end space-x-2 p-4 border-t'>
                       <Button asChild variant='outline'>
-                        <Link href={PATH.CART}>Thanh toán</Link>
+                        <Link href={PATH.CART_ORDER_INFO}>Thanh toán</Link>
                       </Button>
                       <Button asChild>
                         <Link href={PATH.CART}>Xem giỏ hàng</Link>
@@ -197,9 +197,7 @@ export default function CustomerHeader() {
                 <div className='relative'>
                   <ShoppingBag className='w-5' />
                   <span className='absolute -top-2 -right-1.5 w-[18px] h-[18px] rounded-full bg-yellow-400 flex justify-center items-center border-[2px] border-white'>
-                    <span className='text-black text-[10px] font-bold'>
-                      {getMycartQuery.data?.data.data.pagination.totalRows || 0}
-                    </span>
+                    <span className='text-black text-[10px] font-bold'>{paginationCart.totalRows || 0}</span>
                   </span>
                 </div>
               </div>

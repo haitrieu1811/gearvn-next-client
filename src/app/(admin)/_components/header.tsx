@@ -78,7 +78,7 @@ export default function AdminHeader() {
             )}
           >
             <Avatar>
-              <AvatarImage src={loggedUser.avatar} alt={loggedUser.fullName} />
+              <AvatarImage src={loggedUser.avatar && loggedUser.avatar.url} alt={loggedUser.fullName} />
               <AvatarFallback>{`${loggedUser.fullName[0].toUpperCase()}${loggedUser.fullName[1].toUpperCase()}`}</AvatarFallback>
             </Avatar>
           </Tippy>

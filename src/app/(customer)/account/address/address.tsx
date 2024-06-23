@@ -1,6 +1,6 @@
 'use client'
 
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { Loader2, PlusCircle } from 'lucide-react'
 import React from 'react'
 import { toast } from 'sonner'
@@ -23,25 +23,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import isAuth from '@/hocs/isAuth'
+import useMyAddresses from '@/hooks/useMyAddresses'
 
 export default isAuth(function AccountAddress() {
   const [isOpenCreateAddressDialog, setIsOpenCreateAddressDialog] = React.useState<boolean>(false)
   const [currentDeletedAddressId, setCurrentDeletedAddressId] = React.useState<string | null>(null)
   const [currentUpdatedAddressId, setCurrentUpdatedAddressId] = React.useState<string | null>(null)
 
-  const getMyAddressesQuery = useQuery({
-    queryKey: ['getMyAddresses'],
-    queryFn: () => addressesApis.getMyAddresses()
-  })
-
-  const myAddresses = React.useMemo(
-    () => getMyAddressesQuery.data?.data.data.addresses || [],
-    [getMyAddressesQuery.data?.data.data.addresses]
-  )
-  const totalMyAddress = React.useMemo(
-    () => getMyAddressesQuery.data?.data.data.pagination.totalRows || 0,
-    [getMyAddressesQuery.data?.data.data.pagination.totalRows]
-  )
+  const { getMyAddressesQuery, myAddresses, totalMyAddreses } = useMyAddresses()
 
   const setDefaultAddressMutation = useMutation({
     mutationKey: ['setDefaultAddress'],
@@ -72,7 +61,7 @@ export default isAuth(function AccountAddress() {
           </Button>
         </CardHeader>
         <CardContent>
-          {totalMyAddress > 0 &&
+          {totalMyAddreses > 0 &&
             myAddresses.map((address) => (
               <div key={address._id} className='flex items-center space-x-10 py-4 border-t first:border-t-0'>
                 <div className='flex-1 space-y-1'>
@@ -124,7 +113,7 @@ export default isAuth(function AccountAddress() {
                 </div>
               </div>
             ))}
-          {totalMyAddress === 0 && <div>Chưa có địa chỉ nào.</div>}
+          {totalMyAddreses === 0 && <div>Chưa có địa chỉ nào.</div>}
         </CardContent>
       </Card>
       {/* CREATE ADDRESS DIALOG */}
