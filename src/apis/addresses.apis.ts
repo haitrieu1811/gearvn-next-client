@@ -6,7 +6,6 @@ import {
   GetAddressesResponse,
   GetAllProvincesResponse,
   GetDistrictsResponse,
-  GetStreetsResponse,
   GetWardsResponse
 } from '@/types/addresses.types'
 import { OnlyMessageResponse, PaginationReqQuery } from '@/types/utils.types'
@@ -22,10 +21,6 @@ const addressesApis = {
 
   getWards({ provinceId, districtId }: { provinceId: string; districtId: string }) {
     return http.get<GetWardsResponse>(`/v1/addresses/provinces/${provinceId}/districts/${districtId}/wards`)
-  },
-
-  getStreets({ provinceId, districtId }: { provinceId: string; districtId: string }) {
-    return http.get<GetStreetsResponse>(`/v1/addresses/provinces/${provinceId}/districts/${districtId}/streets`)
   },
 
   createAddress(body: CreateAddressReqBody) {

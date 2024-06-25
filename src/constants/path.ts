@@ -15,6 +15,7 @@ const PATH = {
   CART_ORDER_SUCCESS: '/cart/order-success',
   PRODUCT_DETAIL: ({ name, id }: { name: string; id: string }) => `/product/${generateNameId({ name, id })}`,
   POST_DETAIL: ({ name, id }: { name: string; id: string }) => `/post/${generateNameId({ name, id })}`,
+  ORDER_DETAIL: (orderId: string) => `/account/order/${orderId}`,
 
   ADMIN: '/admin',
   ADMIN_USER: '/admin/user',

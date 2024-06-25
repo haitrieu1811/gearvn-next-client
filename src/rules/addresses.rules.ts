@@ -12,7 +12,6 @@ export const addressSchema = z.object({
   provinceId: z.string().min(1, 'Tỉnh/thành phố là bắt buộc.'),
   districtId: z.string().min(1, 'Quận/huyện là bắt buộc.'),
   wardId: z.string().min(1, 'Phường/xã là bắt buộc.'),
-  streetId: z.string().min(1, 'Đường là bắt buộc.'),
   detailAddress: z.string().min(1, 'Địa chỉ chi tiết là bắt buộc.'),
   type: z.string().optional()
 })
@@ -24,7 +23,6 @@ export const createAddressSchema = addressSchema
     provinceId: true,
     districtId: true,
     wardId: true,
-    streetId: true,
     detailAddress: true,
     type: true
   })

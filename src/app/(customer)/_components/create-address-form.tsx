@@ -44,7 +44,6 @@ export default function CreateAddressForm({ addressId, onCreateSuccess, onUpdate
       provinceId: '',
       districtId: '20',
       wardId: '',
-      streetId: '',
       detailAddress: '',
       type: ''
     }
@@ -54,7 +53,7 @@ export default function CreateAddressForm({ addressId, onCreateSuccess, onUpdate
   React.useEffect(() => {
     if (!address) return
     const { setValue } = form
-    const { fullName, phoneNumber, province, district, ward, street, detailAddress, type } = address
+    const { fullName, phoneNumber, province, district, ward, detailAddress, type } = address
     // setValue('fullName', fullName)
     // setValue('phoneNumber', phoneNumber)
     // setValue('provinceId', province._id)
@@ -98,17 +97,6 @@ export default function CreateAddressForm({ addressId, onCreateSuccess, onUpdate
   })
 
   const wards = React.useMemo(() => getWardsQuery.data?.data.data.wards || [], [getWardsQuery.data?.data.data.wards])
-
-  const getStreetsQuery = useQuery({
-    queryKey: ['getStreets', provinceId, districtId],
-    queryFn: () => addressesApis.getStreets({ provinceId, districtId }),
-    enabled: !!(provinceId && districtId)
-  })
-
-  const streets = React.useMemo(
-    () => getStreetsQuery.data?.data.data.streets || [],
-    [getStreetsQuery.data?.data.data.streets]
-  )
 
   // RESET VALUE WHEN CHANGE PROVINCE/DISTRICT
   React.useEffect(() => {
@@ -277,47 +265,22 @@ export default function CreateAddressForm({ addressId, onCreateSuccess, onUpdate
             />
           </div>
           <div className='col-span-6'>
-            {/* STREET */}
+            {/* DETAIL ADDRESS */}
             <FormField
               control={form.control}
-              name='streetId'
+              name='detailAddress'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tên đường</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder='Chọn tên đường' />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {streets.map((street) => (
-                        <SelectItem key={street.id} value={street.id}>
-                          {street.prefix} {street.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <FormLabel>Địa chỉ chi tiết</FormLabel>
+                  <FormControl>
+                    <Input type='text' placeholder='Số nhà' {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
         </div>
-        {/* DETAIL ADDRESS */}
-        <FormField
-          control={form.control}
-          name='detailAddress'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Địa chỉ chi tiết</FormLabel>
-              <FormControl>
-                <Input type='text' placeholder='Số nhà' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         {/* TYPE */}
         <FormField
           control={form.control}

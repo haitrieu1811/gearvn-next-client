@@ -36,7 +36,6 @@ export type CheckoutReqBody = {
   provinceId: string
   districtId: string
   wardId: string
-  streetId: string
   detailAddress: string
   paymentMethod: PaymentMethod
 }

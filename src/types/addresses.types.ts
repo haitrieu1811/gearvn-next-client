@@ -18,19 +18,12 @@ export type WardItem = {
   prefix: string
 }
 
-export type StreetItem = {
-  id: string
-  name: string
-  prefix: string
-}
-
 export type OriginalAddress = {
   _id: string
   userId: string
   provinceId: string
   districtId: string
   wardId: string
-  streetId: string
   detailAddress: string
   type: AddressType
   fullName: string
@@ -46,7 +39,6 @@ export type AddressItem = {
   province: ProvinceItem
   district: DistrictItem
   ward: WardItem
-  street: StreetItem
   detailAddress: string
   type: AddressType
   isDefaultAddress: boolean
@@ -58,7 +50,6 @@ export type CreateAddressReqBody = {
   provinceId: string
   districtId: string
   wardId: string
-  streetId: string
   detailAddress: string
   type: AddressType
   fullName: string
@@ -81,11 +72,6 @@ export type GetDistrictsResponse = SuccessResponse<{
 
 export type GetWardsResponse = SuccessResponse<{
   wards: WardItem[]
-  totalRows: number
-}>
-
-export type GetStreetsResponse = SuccessResponse<{
-  streets: StreetItem[]
   totalRows: number
 }>
 

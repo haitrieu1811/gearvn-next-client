@@ -16,7 +16,7 @@ import { cn, formatCurrency } from '@/lib/utils'
 import { CartContext } from '@/providers/cart.provider'
 import { CheckoutContext } from '@/providers/checkout.provider'
 
-const PAYMENT_METHOD = {
+export const PAYMENT_METHOD = {
   [PaymentMethod.Cash]: 'Tiền mặt',
   [PaymentMethod.Banking]: 'Chuyển khoản qua nhân hàng.'
 } as const
@@ -39,14 +39,13 @@ export default function OrderReview() {
 
   const handleCheckout = () => {
     if (!currentAddress) return
-    const { fullName, phoneNumber, province, district, ward, street, detailAddress } = currentAddress
+    const { fullName, phoneNumber, province, district, ward, detailAddress } = currentAddress
     checkoutMutation.mutate({
       fullName,
       phoneNumber,
       provinceId: province._id,
       districtId: district.id,
       wardId: ward.id,
-      streetId: street.id,
       detailAddress,
       paymentMethod
     })
@@ -69,8 +68,7 @@ export default function OrderReview() {
             <TableRow>
               <TableCell className='font-semibold'>Địa chỉ nhận hàng:</TableCell>
               <TableCell>
-                {currentAddress?.detailAddress}, {currentAddress?.street.prefix} {currentAddress?.street.name},{' '}
-                {currentAddress?.district.name}, {currentAddress?.province.name}
+                {currentAddress?.detailAddress}, {currentAddress?.district.name}, {currentAddress?.province.name}
               </TableCell>
             </TableRow>
             <TableRow>

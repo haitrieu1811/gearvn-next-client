@@ -76,8 +76,8 @@ export default isAuth(function AccountAddress() {
                     <div className='text-muted-foreground'>{address.phoneNumber}</div>
                   </div>
                   <div className='text-sm text-muted-foreground'>
-                    {address.detailAddress}, {address.street.prefix} {address.street.name}, {address.ward.prefix}{' '}
-                    {address.ward.name}, {address.province.name}
+                    {address.detailAddress}, {address.ward.prefix} {address.ward.name}, {address.district.name},{' '}
+                    {address.province.name}
                   </div>
                 </div>
                 <div className='flex flex-col items-center'>
