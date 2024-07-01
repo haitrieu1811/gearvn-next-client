@@ -64,6 +64,10 @@ export default function AccountOrder() {
     () => getMyOrdersQuery.data?.data.data.pagination.totalRows || 0,
     [getMyOrdersQuery.data?.data.data.pagination.totalRows]
   )
+  const analytics = React.useMemo(
+    () => getMyOrdersQuery.data?.data.data.analytics,
+    [getMyOrdersQuery.data?.data.data.analytics]
+  )
 
   const orderData = React.useMemo(
     () => [
@@ -76,35 +80,35 @@ export default function AccountOrder() {
       {
         field: 'Chờ xác nhận',
         value: 'waitForConfirmation',
-        quantity: orders.filter((order) => order.status === OrderStatus.WaitForConfirmation).length,
+        quantity: analytics?.totalWaitForConfirmation || 0,
         orders: orders.filter((order) => order.status === OrderStatus.WaitForConfirmation)
       },
       {
         field: 'Đã xác nhận',
         value: 'confirmed',
-        quantity: orders.filter((order) => order.status === OrderStatus.Confirmed).length,
+        quantity: analytics?.totalConfirmed || 0,
         orders: orders.filter((order) => order.status === OrderStatus.Confirmed)
       },
       {
         field: 'Đang giao',
         value: 'delivering',
-        quantity: orders.filter((order) => order.status === OrderStatus.Delivering).length,
+        quantity: analytics?.totalDelivering || 0,
         orders: orders.filter((order) => order.status === OrderStatus.Delivering)
       },
       {
         field: 'Đã giao',
         value: 'delivered',
-        quantity: orders.filter((order) => order.status === OrderStatus.Delivered).length,
+        quantity: analytics?.totalDelivered || 0,
         orders: orders.filter((order) => order.status === OrderStatus.Delivered)
       },
       {
         field: 'Đã hủy',
         value: 'Cancelled',
-        quantity: orders.filter((order) => order.status === OrderStatus.Cancelled).length,
+        quantity: analytics?.totalCancelled || 0,
         orders: orders.filter((order) => order.status === OrderStatus.Cancelled)
       }
     ],
-    [orders, totalOrder]
+    [orders, totalOrder, analytics]
   )
 
   return (

@@ -35,6 +35,14 @@ import usePosts from '@/hooks/usePosts'
 import useProducts from '@/hooks/useProducts'
 import { cn, formatCurrency, rateSale } from '@/lib/utils'
 import { AppContext } from '@/providers/app.provider'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator
+} from '@/components/ui/breadcrumb'
 
 type ProductDetailContext = {
   setCurrentUpdatedReviewId: React.Dispatch<React.SetStateAction<string | null>>
@@ -126,6 +134,21 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
     >
       <div className='py-5'>
         <div className='max-w-6xl mx-auto grid gap-5'>
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href={PATH.HOME}>Trang chủ</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink href={PATH.PRODUCT}>Tất cả sản phẩm</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{product?.name}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
           {activePhoto && product ? (
             <div className='flex bg-background space-x-5 p-5'>
               {/* PHOTOS */}

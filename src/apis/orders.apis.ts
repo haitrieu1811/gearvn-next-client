@@ -16,7 +16,7 @@ const ordersApis = {
     return http.get<GetOrderResponse>(`/v1/orders/${orderId}`)
   },
 
-  updateOrder({ status, orderId }: { status: OrderStatus; orderId: string }) {
+  updateOrderStatus({ status, orderId }: { status: OrderStatus; orderId: string }) {
     return http.patch<UpdateOrderResponse>(`/v1/orders/${orderId}`, { status })
   },
 

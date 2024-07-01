@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: 'Chi tiết đơn hàng - GEARVN'
 }
 
-export default function AccountOrderDetail({ params }: { params: { id: string } }) {
+export default function AccountOrderDetailPage({ params }: { params: { id: string } }) {
   const { id } = params
   return <OrderDetail orderId={id} />
 }

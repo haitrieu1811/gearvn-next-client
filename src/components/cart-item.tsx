@@ -52,7 +52,7 @@ export default React.memo(function CartItem({
       <div className='flex-1'>
         <Link
           href={PATH.PRODUCT_DETAIL({ name: cartItemData.product.name, id: cartItemData.product._id })}
-          className='font-medium hover:underline'
+          className='font-medium hover:underline text-[15px]'
         >
           {cartItemData.product.name}
         </Link>

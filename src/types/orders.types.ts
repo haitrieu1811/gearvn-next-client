@@ -62,11 +62,20 @@ export type OrderItem = {
   updatedAt: string
 }
 
+export type OrderAnalytics = {
+  totalWaitForConfirmation: number
+  totalConfirmed: number
+  totalDelivering: number
+  totalDelivered: number
+  totalCancelled: number
+}
+
 export type GetOrdersReqQuery = PaginationReqQuery & {
   status?: OrderStatus
 }
 
 export type GetOrdersResponse = SuccessResponse<{
+  analytics: OrderAnalytics
   orders: OrderItem[]
   pagination: Pagination
 }>
