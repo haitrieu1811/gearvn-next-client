@@ -110,11 +110,14 @@ export default function Home() {
         </Card>
         {/* POSTS */}
         <Card>
-          <CardHeader>
+          <CardHeader className='flex-row justify-between items-center space-y-0'>
             <CardTitle className='text-2xl'>Tin tức công nghệ</CardTitle>
+            <Button asChild variant='link'>
+              <Link href={PATH.POST}>Xem tất cả</Link>
+            </Button>
           </CardHeader>
           <CardContent>
-            <div className='grid grid-cols-12 gap-2'>
+            <div className='grid grid-cols-12 gap-5'>
               {posts.map((post) => (
                 <div key={post._id} className='col-span-3'>
                   <PostItem key={post._id} postData={post} />

@@ -23,6 +23,14 @@ import {
   AlertDialogTitle
 } from '@/components/ui/alert-dialog'
 import { Badge } from '@/components/ui/badge'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator
+} from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
@@ -35,14 +43,6 @@ import usePosts from '@/hooks/usePosts'
 import useProducts from '@/hooks/useProducts'
 import { cn, formatCurrency, rateSale } from '@/lib/utils'
 import { AppContext } from '@/providers/app.provider'
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator
-} from '@/components/ui/breadcrumb'
 
 type ProductDetailContext = {
   setCurrentUpdatedReviewId: React.Dispatch<React.SetStateAction<string | null>>
@@ -137,11 +137,15 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href={PATH.HOME}>Trang chủ</BreadcrumbLink>
+                <BreadcrumbLink asChild>
+                  <Link href={PATH.HOME}>Trang chủ</Link>
+                </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink href={PATH.PRODUCT}>Tất cả sản phẩm</BreadcrumbLink>
+                <BreadcrumbLink asChild>
+                  <Link href={PATH.PRODUCT}>Tất cả sản phẩm</Link>
+                </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>

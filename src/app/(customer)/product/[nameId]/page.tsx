@@ -24,7 +24,7 @@ export async function generateMetadata(
   }
 }
 
-export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
+export default function ProductDetailPage({ params }: ProductDetailPageProps) {
   const { nameId } = params
   const productId = getIdFromNameId(nameId)
   return <ProductDetail productId={productId} />

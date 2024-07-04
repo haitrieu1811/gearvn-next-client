@@ -27,6 +27,13 @@ export type Pagination = {
   totalPages: number
 }
 
+export const defaultPagination: Pagination = {
+  page: 1,
+  limit: 20,
+  totalRows: 0,
+  totalPages: 0
+}
+
 export type PaginationReqQuery = {
   page?: string
   limit?: string

@@ -10,6 +10,7 @@ const PATH = {
   ACCOUNT_ADDRESS: '/account/address',
   ACCOUNT_PASSWORD: '/account/password',
   PRODUCT: '/product',
+  POST: '/post',
   CART_ORDER_INFO: '/cart/order-info',
   CART_ORDER_REVIEW: '/cart/order-review',
   CART_ORDER_SUCCESS: '/cart/order-success',
