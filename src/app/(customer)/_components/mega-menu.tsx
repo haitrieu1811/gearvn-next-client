@@ -1,14 +1,14 @@
-'use client'
-
-import { Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
 import PATH from '@/constants/path'
-import useProductCategories from '@/hooks/useProductCategories'
+import { ProductCategoryItem } from '@/types/productCategories.types'
 
-export default function MegaMenu() {
-  const { productCategories, getProductCategoriesQuery } = useProductCategories()
+export default async function MegaMenu() {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/v1/product-categories`).then((res) =>
+    res.json()
+  )
+  const productCategories = response.data.productCategories as ProductCategoryItem[]
 
   return (
     <div className='bg-background shadow-sm rounded-md overflow-hidden'>
@@ -33,11 +33,6 @@ export default function MegaMenu() {
           <span className='text-sm'>{productCategory.name}</span>
         </Link>
       ))}
-      {getProductCategoriesQuery.isLoading && (
-        <div className='flex justify-center py-5'>
-          <Loader2 size={30} strokeWidth={1} className='animate-spin stroke-main' />
-        </div>
-      )}
     </div>
   )
 }

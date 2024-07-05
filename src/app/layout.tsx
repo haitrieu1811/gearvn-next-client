@@ -17,8 +17,8 @@ const fontSans = FontSans({
 })
 
 export const metadata: Metadata = {
-  title: 'Trang chủ - Gearvn.',
-  description: 'Trang chủ - Gearvn.'
+  title: 'Trang chủ - GEARVN',
+  description: 'Trang chủ - GEARVN'
 }
 
 export default function RootLayout({
