@@ -91,6 +91,10 @@
 }
 
 @layer utilities {
+  .editor {
+    @apply space-y-5;
+  }
+
   .editor h1,
   .editor h2,
   .editor h3,
@@ -116,6 +120,10 @@
 
   .editor img {
     @apply mx-auto rounded-lg;
+  }
+
+  .editor p {
+    @apply text-justify;
   }
 
   .editor ol {

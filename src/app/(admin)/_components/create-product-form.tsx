@@ -27,9 +27,11 @@ import { ProductStatus } from '@/constants/enum'
 import useAllBrands from '@/hooks/useAllBrands'
 import useAllProductCategories from '@/hooks/useAllProductCategories'
 import useUploadImage from '@/hooks/useUploadImage'
-import { convertMomentToVietnamese } from '@/lib/utils'
+import { convertMomentToVietnamese, htmlToMarkdown } from '@/lib/utils'
 import { CreateProductSchema, createProductSchema } from '@/rules/products.rules'
 import { CreateProductReqBody } from '@/types/products.types'
+import Editor from '@/components/editor'
+import { Label } from '@/components/ui/label'
 
 type CreateProductFormProps = {
   productId?: string
@@ -45,6 +47,7 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
   const [photoIds, setPhotoIds] = React.useState<string[]>([])
   const [isOpenCreateProductCategoryDialog, setIsOpenCreateProductCategoryDialog] = React.useState<boolean>(false)
   const [isOpenCreateBrandDialog, setIsOpenCreateBrandDialog] = React.useState<boolean>(false)
+  const [markdownDescription, setMarkdownDescription] = React.useState<string>('')
 
   const previewThumbnail = React.useMemo(
     () => (thumbnailFile ? URL.createObjectURL(thumbnailFile) : null),
@@ -128,7 +131,6 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
     const { setValue } = form
     setValue('name', name)
     setValue('shortDescription', shortDescription)
-    setValue('description', description)
     setValue('orderNumber', String(orderNumber))
     setValue('originalPrice', String(originalPrice))
     setValue('priceAfterDiscount', String(priceAfterDiscount))
@@ -137,10 +139,11 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
     setValue('brandId', brand._id)
     setValue(
       'specifications',
-      specifications.map((item) => ({ key: item.key, value: item.value }))
+      specifications?.map((item) => ({ key: item.key, value: item.value }))
     )
+
     setPhotoIds(photos.map((photo) => photo._id))
-    form.trigger('productCategoryId')
+    setMarkdownDescription(htmlToMarkdown(description))
   }, [form, product])
 
   // UPDATE FORM DATA (UPDATE MODE)
@@ -383,20 +386,16 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
                     )}
                   />
                   {/* DESCRIPTION */}
-                  <FormField
-                    control={form.control}
-                    name='description'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Mô tả sản phẩm</FormLabel>
-                        <FormControl>
-                          <Textarea rows={5} {...field} />
-                        </FormControl>
-                        <FormDescription>Mô tả toàn bộ về sản phẩm.</FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className='space-y-2'>
+                    <Label>Mô tả sản phẩm</Label>
+                    <Editor
+                      value={markdownDescription}
+                      onChange={({ html, text }) => {
+                        form.setValue('description', html)
+                        !!text && setMarkdownDescription(text)
+                      }}
+                    />
+                  </div>
                 </CardContent>
               </Card>
               {/* PRICE */}

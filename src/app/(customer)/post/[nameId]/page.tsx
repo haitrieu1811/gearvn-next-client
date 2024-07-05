@@ -87,7 +87,7 @@ export default async function PostDetailPage({ params }: PostDetailProps) {
           </CardHeader>
           <CardContent>
             <div
-              className='space-y-5 editor'
+              className='editor'
               dangerouslySetInnerHTML={{
                 __html: post?.content || ''
               }}
