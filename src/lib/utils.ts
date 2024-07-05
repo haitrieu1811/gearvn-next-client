@@ -3,6 +3,7 @@ import { clsx, type ClassValue } from 'clsx'
 import isEmpty from 'lodash/isEmpty'
 import { FieldValues, Path, UseFormReturn } from 'react-hook-form'
 import { twMerge } from 'tailwind-merge'
+import TurndownService from 'turndown'
 
 import { ErrorResponse } from '@/types/utils.types'
 
@@ -96,4 +97,9 @@ export const rateSale = (originalPrice: number, salePrice: number) => {
 
 export const numberEnumToArray = (numberEnum: { [key: string]: string | number }) => {
   return Object.values(numberEnum).filter((item) => typeof item === 'number') as number[]
+}
+
+export const htmlToMarkdown = (html: string) => {
+  const turndownService = new TurndownService()
+  return turndownService.turndown(html)
 }

@@ -14,6 +14,7 @@ import { toast } from 'sonner'
 
 import postsApis from '@/apis/posts.apis'
 import { approvalStatuses } from '@/app/(admin)/_columns/posts.columns'
+import Editor from '@/components/editor'
 import InputFile from '@/components/input-file'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -24,7 +25,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea'
 import { PostStatus } from '@/constants/enum'
 import useUploadImage from '@/hooks/useUploadImage'
-import { convertMomentToVietnamese, handleErrorsFromServer } from '@/lib/utils'
+import { convertMomentToVietnamese, handleErrorsFromServer, htmlToMarkdown } from '@/lib/utils'
 import { CreatePostSchema, createPostSchema } from '@/rules/posts.rules'
 
 type CreatePostFormProps = {
@@ -37,6 +38,7 @@ export default function CreatePostForm({ postId }: CreatePostFormProps) {
   const isUpdateMode = !!postId
 
   const [thumbnailFile, setThumbnailFile] = React.useState<File | null>(null)
+  const [markdownContent, setMarkdownContent] = React.useState<string>('')
 
   const previewThumbnail = React.useMemo(
     () => (thumbnailFile ? URL.createObjectURL(thumbnailFile) : null),
@@ -53,9 +55,9 @@ export default function CreatePostForm({ postId }: CreatePostFormProps) {
     defaultValues: {
       title: '',
       description: '',
-      content: '',
       orderNumber: '',
-      status: ''
+      status: '',
+      content: ''
     }
   })
 
@@ -78,9 +80,9 @@ export default function CreatePostForm({ postId }: CreatePostFormProps) {
     const { setValue } = form
     setValue('title', title)
     setValue('description', description)
-    setValue('content', content)
     setValue('status', status.toString())
     setValue('orderNumber', orderNumber.toString())
+    setMarkdownContent(htmlToMarkdown(content))
   }, [form, post])
 
   // FILL DATA INTO THE FORM (UPDATE MODE)
@@ -128,6 +130,7 @@ export default function CreatePostForm({ postId }: CreatePostFormProps) {
 
   const handleSubmit = form.handleSubmit(async (data) => {
     if (!isUpdateMode && !thumbnailFile) return
+    if (!form.getValues('content').trim()) return
     let thumbnailId = post?.thumbnail._id
     if (thumbnailFile) {
       const form = new FormData()
@@ -141,16 +144,17 @@ export default function CreatePostForm({ postId }: CreatePostFormProps) {
         ...data,
         status: Number(data.status),
         orderNumber: Number(data.orderNumber),
-        thumbnail: thumbnailId
+        thumbnail: thumbnailId,
+        content: form.getValues('content')
       })
       return
     }
-    const { title, description, content, orderNumber, status } = data
+    const { title, description, orderNumber, status } = data
     const body = omitBy(
       {
         title: title !== post?.title ? title : undefined,
         description: description !== post?.description ? description : undefined,
-        content: content !== post?.content ? content : undefined,
+        content: form.getValues('content') !== post?.content ? form.getValues('content') : undefined,
         orderNumber: Number(orderNumber) !== post?.orderNumber ? Number(orderNumber) : undefined,
         status: Number(status) !== post?.status ? Number(status) : undefined,
         thumbnail: thumbnailId !== post?.thumbnail._id ? thumbnailId : undefined
@@ -163,62 +167,28 @@ export default function CreatePostForm({ postId }: CreatePostFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit}>
-        <div className='flex items-center space-x-3'>
-          <Button type='button' size='icon' variant='outline' className='w-8 h-8' onClick={() => router.back()}>
-            <ChevronLeft size={16} />
-          </Button>
+        <div className='flex justify-between items-center'>
           <div className='flex items-center space-x-3'>
-            <h1 className='text-xl tracking-tight font-semibold'>{!post ? 'Tạo bài viết mới' : post.title}</h1>
-            {post && approvalStatuses[post.approvalStatus]}
+            <Button type='button' size='icon' variant='outline' className='w-8 h-8' onClick={() => router.back()}>
+              <ChevronLeft size={16} />
+            </Button>
+            <div className='flex items-center space-x-3'>
+              <h1 className='text-xl tracking-tight font-semibold'>{!post ? 'Tạo bài viết mới' : post.title}</h1>
+              {post && approvalStatuses[post.approvalStatus]}
+            </div>
+          </div>
+          <div className='flex justify-center space-x-2'>
+            <Button variant='outline' type='button' size='sm' className='capitalize' onClick={handleCancel}>
+              Hủy bỏ
+            </Button>
+            <Button type='submit' size='sm' disabled={isFormPending} className='capitalize'>
+              {isFormPending && <Loader2 className='w-4 h-4 mr-2 animate-spin' />}
+              {!isUpdateMode ? 'Tạo bài viết' : 'Cập nhật bài viết'}
+            </Button>
           </div>
         </div>
-        <div className='grid grid-cols-12 gap-5 mt-10'>
-          <div className='col-span-3'>
-            {/* THUMBNAIL */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Hình đại diện bài viết</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className='space-y-2'>
-                  {/* THUMNAIL NOT UPLOAD */}
-                  {!thumbnailFile && !post?.thumbnail && (
-                    <InputFile onChange={(files) => handleChangeThumbnail(files)}>
-                      <div className='aspect-square bg-muted rounded-lg flex justify-center items-center hover:cursor-pointer'>
-                        <Upload size={40} strokeWidth={1.5} />
-                      </div>
-                    </InputFile>
-                  )}
-                  {/* AVAILABLE THUMBNAIL */}
-                  {(!!previewThumbnail || post?.thumbnail) && (
-                    <div className='relative'>
-                      <Image
-                        width={200}
-                        height={200}
-                        src={previewThumbnail || post?.thumbnail.url || ''}
-                        alt={post?.title || ''}
-                        className='aspect-square w-full object-cover rounded-lg'
-                      />
-                      <div className='absolute inset-x-0 bottom-0 p-2 rounded-b-lg bg-muted-foreground/50 flex justify-end'>
-                        <InputFile onChange={(files) => handleChangeThumbnail(files)}>
-                          <Button type='button' size='sm'>
-                            Đổi ảnh khác
-                          </Button>
-                        </InputFile>
-                      </div>
-                    </div>
-                  )}
-                  {/* THUMBNAIL ERROR MESSAGE */}
-                  {!thumbnailFile && form.formState.isSubmitted && !isUpdateMode && (
-                    <p className='text-xs text-destructive font-medium text-[0.8rem]'>
-                      Ảnh đại diện bài viết là bắt buộc.
-                    </p>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-          <div className='col-span-6 grid gap-5'>
+        <div className='grid grid-cols-12 gap-5 mt-5'>
+          <div className='col-span-9 grid gap-5'>
             <Card>
               <CardHeader>
                 <CardTitle>Thông tin bài viết</CardTitle>
@@ -270,33 +240,66 @@ export default function CreatePostForm({ postId }: CreatePostFormProps) {
                   )}
                 />
                 {/* CONTENT */}
-                <FormField
-                  control={form.control}
-                  name='content'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Nội dung bài viết</FormLabel>
-                      <FormControl>
-                        <Textarea rows={5} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+                <div className='space-y-2'>
+                  <Editor
+                    value={markdownContent}
+                    onChange={({ html, text }) => {
+                      form.setValue('content', html)
+                      !!text && setMarkdownContent(text)
+                    }}
+                  />
+                  {form.formState.isSubmitted && !form.getValues('content').trim() && (
+                    <p className='text-[0.8rem] font-medium text-destructive'>Vui lòng nhập nội dung bài viết</p>
                   )}
-                />
+                </div>
               </CardContent>
             </Card>
-            <div className='flex justify-center space-x-2'>
-              <Button variant='outline' type='button' size='sm' className='capitalize' onClick={handleCancel}>
-                Hủy bỏ
-              </Button>
-              <Button type='submit' size='sm' disabled={isFormPending} className='capitalize'>
-                {isFormPending && <Loader2 className='w-4 h-4 mr-2 animate-spin' />}
-                {!isUpdateMode ? 'Tạo bài viết' : 'Cập nhật bài viết'}
-              </Button>
-            </div>
           </div>
           <div className='col-span-3'>
             <div className='grid gap-5'>
+              {/* THUMBNAIL */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Hình đại diện bài viết</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className='space-y-2'>
+                    {/* THUMNAIL NOT UPLOAD */}
+                    {!thumbnailFile && !post?.thumbnail && (
+                      <InputFile onChange={(files) => handleChangeThumbnail(files)}>
+                        <div className='aspect-square bg-muted rounded-lg flex justify-center items-center hover:cursor-pointer'>
+                          <Upload size={40} strokeWidth={1.5} />
+                        </div>
+                      </InputFile>
+                    )}
+                    {/* AVAILABLE THUMBNAIL */}
+                    {(!!previewThumbnail || post?.thumbnail) && (
+                      <div className='relative'>
+                        <Image
+                          width={200}
+                          height={200}
+                          src={previewThumbnail || post?.thumbnail.url || ''}
+                          alt={post?.title || ''}
+                          className='aspect-square w-full object-cover rounded-lg'
+                        />
+                        <div className='absolute inset-x-0 bottom-0 p-2 rounded-b-lg bg-muted-foreground/50 flex justify-end'>
+                          <InputFile onChange={(files) => handleChangeThumbnail(files)}>
+                            <Button type='button' size='sm'>
+                              Đổi ảnh khác
+                            </Button>
+                          </InputFile>
+                        </div>
+                      </div>
+                    )}
+                    {/* THUMBNAIL ERROR MESSAGE */}
+                    {!thumbnailFile && form.formState.isSubmitted && !isUpdateMode && (
+                      <p className='text-xs text-destructive font-medium text-[0.8rem]'>
+                        Ảnh đại diện bài viết là bắt buộc.
+                      </p>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
               {/* STATUS */}
               <Card>
                 <CardHeader>

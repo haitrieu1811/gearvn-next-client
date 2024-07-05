@@ -89,3 +89,40 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .editor h1,
+  .editor h2,
+  .editor h3,
+  .editor h4,
+  .editor h5,
+  .editor h6 {
+    @apply font-semibold tracking-tight;
+  }
+  .editor h1 {
+    @apply text-2xl;
+  }
+
+  .editor h2 {
+    @apply text-2xl;
+  }
+
+  .editor h3,
+  .editor h4,
+  .editor h5,
+  .editor h6 {
+    @apply text-lg;
+  }
+
+  .editor img {
+    @apply mx-auto rounded-lg;
+  }
+
+  .editor ol {
+    @apply space-y-2;
+  }
+
+  .editor strong {
+    @apply font-semibold;
+  }
+}
