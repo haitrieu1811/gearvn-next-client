@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Be_Vietnam_Pro as FontSans } from 'next/font/google'
+import { Chivo as FontSans } from 'next/font/google'
 import NextTopLoader from 'nextjs-toploader'
 
 import { Toaster } from '@/components/ui/sonner'

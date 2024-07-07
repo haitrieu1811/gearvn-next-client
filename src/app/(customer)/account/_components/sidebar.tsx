@@ -9,46 +9,52 @@ import InputFile from '@/components/input-file'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import PATH from '@/constants/path'
 import useIsClient from '@/hooks/useIsClient'
+import useLogout from '@/hooks/useLogout'
 import { cn } from '@/lib/utils'
 import { AccountContext } from '@/providers/account.provider'
 import { AppContext } from '@/providers/app.provider'
 
-const LINKS: {
-  href: string | null
-  name: string
-  icon: LucideIcon
-  onClick?: () => void
-}[] = [
-  {
-    href: PATH.ACCOUNT,
-    name: 'Thông tin tài khoản',
-    icon: UserRound
-  },
-  {
-    href: PATH.ACCOUNT_ADDRESS,
-    name: 'Sổ địa chỉ',
-    icon: MapPin
-  },
-  {
-    href: PATH.ACCOUNT_ORDER,
-    name: 'Quản lý đơn hàng',
-    icon: NotepadText
-  },
-  {
-    href: PATH.ACCOUNT_PASSWORD,
-    name: 'Đổi mật khẩu',
-    icon: Key
-  },
-  {
-    href: null,
-    name: 'Đăng xuất',
-    icon: LogOut,
-    onClick: () => {}
-  }
-] as const
-
 export default function SidebarAccount() {
   const pathname = usePathname()
+
+  const { handleLogout } = useLogout()
+
+  const LINKS: {
+    href: string | null
+    name: string
+    icon: LucideIcon
+    onClick?: () => void
+  }[] = React.useMemo(
+    () => [
+      {
+        href: PATH.ACCOUNT,
+        name: 'Thông tin tài khoản',
+        icon: UserRound
+      },
+      {
+        href: PATH.ACCOUNT_ADDRESS,
+        name: 'Sổ địa chỉ',
+        icon: MapPin
+      },
+      {
+        href: PATH.ACCOUNT_ORDER,
+        name: 'Quản lý đơn hàng',
+        icon: NotepadText
+      },
+      {
+        href: PATH.ACCOUNT_PASSWORD,
+        name: 'Đổi mật khẩu',
+        icon: Key
+      },
+      {
+        href: null,
+        name: 'Đăng xuất',
+        icon: LogOut,
+        onClick: () => handleLogout()
+      }
+    ],
+    [handleLogout]
+  )
 
   const { avatarFile, setAvatarFile } = React.useContext(AccountContext)
 
