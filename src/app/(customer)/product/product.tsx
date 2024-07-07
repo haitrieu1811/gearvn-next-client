@@ -6,7 +6,7 @@ import React from 'react'
 
 import Pagination from '@/components/pagination'
 import ProductItem from '@/components/product-item'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import useProductCategory from '@/hooks/useProductCategory'
 import useProducts from '@/hooks/useProducts'
@@ -17,6 +17,9 @@ export default function Product() {
   const page = searchParams.get('page') || '1'
   const limit = searchParams.get('limit') || '20'
   const categoryId = searchParams.get('categoryId') || undefined
+  const query = searchParams.get('query') || undefined
+
+  const isSearchMode = !!query
 
   const [sortBy, setSortBy] = React.useState<SortByProduct | undefined>(undefined)
   const [orderBy, setOrderBy] = React.useState<OrderByProduct | undefined>(undefined)
@@ -26,7 +29,8 @@ export default function Product() {
     limit,
     sortBy,
     orderBy,
-    categoryId
+    categoryId,
+    name: query
   })
   const { productCategory } = useProductCategory(categoryId)
 
@@ -47,7 +51,19 @@ export default function Product() {
       <div className='max-w-6xl mx-auto'>
         <Card>
           <CardHeader className='flex-row justify-center'>
-            <CardTitle className='text-2xl'>{!productCategory ? 'Danh sách sản phẩm' : productCategory.name}</CardTitle>
+            {!isSearchMode && (
+              <CardTitle className='text-2xl'>
+                {!productCategory ? 'Danh sách sản phẩm' : productCategory.name}
+              </CardTitle>
+            )}
+            {isSearchMode && (
+              <div className='flex flex-col items-center space-y-2'>
+                <CardTitle className='text-2xl'>Tìm kiếm</CardTitle>
+                <CardDescription>
+                  Tìm kiếm theo <strong>{query}</strong>
+                </CardDescription>
+              </div>
+            )}
           </CardHeader>
           <CardContent className='space-y-10'>
             {totalProduct > 1 && (

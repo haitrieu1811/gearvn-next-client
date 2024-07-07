@@ -20,12 +20,18 @@ export default function CustomerHeaderSearch() {
 
   const debounceSearchQuery = useDebounce({ value: searchQuery })
 
-  const searchBoxRef = React.useRef<HTMLDivElement>(null)
+  const searchBoxRef = React.useRef<HTMLFormElement>(null)
+  const anchorRef = React.useRef<HTMLAnchorElement>(null)
 
   const { products, totalProduct, getPublicProductsQuery } = useProducts({
     name: debounceSearchQuery,
     enabled: !!debounceSearchQuery
   })
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    anchorRef.current?.click()
+  }
 
   return (
     <Tippy
@@ -73,7 +79,12 @@ export default function CustomerHeaderSearch() {
               ))}
               {totalProduct > MAX_SEARCH_RESULTS && (
                 <Link
-                  href={PATH.HOME}
+                  href={{
+                    pathname: PATH.PRODUCT,
+                    query: {
+                      query: searchQuery
+                    }
+                  }}
                   className='w-full block text-center py-2 text-[13px] text-muted-foreground hover:text-main'
                 >
                   Xem thêm sản phẩm
@@ -85,23 +96,33 @@ export default function CustomerHeaderSearch() {
         </div>
       )}
     >
-      <div ref={searchBoxRef} className='relative'>
+      <form ref={searchBoxRef} className='relative' onSubmit={handleSubmit}>
         <Input
           type='text'
           value={searchQuery}
           placeholder='Bạn cần tìm gì'
-          className='bg-background h-10'
+          className='bg-background h-10 pr-10'
           onFocus={() => setIsShowSearchResult(true)}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         <button
+          type='submit'
           disabled={getPublicProductsQuery.isFetching}
           className='absolute top-1/2 -translate-y-1/2 right-0 h-full w-10 flex justify-center items-center'
         >
           {!getPublicProductsQuery.isFetching && <Search size={18} />}
           {getPublicProductsQuery.isFetching && <Loader2 size={18} className='animate-spin' />}
         </button>
-      </div>
+        <Link
+          ref={anchorRef}
+          href={{
+            pathname: PATH.PRODUCT,
+            query: {
+              query: searchQuery
+            }
+          }}
+        />
+      </form>
     </Tippy>
   )
 }
