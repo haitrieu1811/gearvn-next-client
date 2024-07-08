@@ -126,6 +126,10 @@
     @apply text-justify;
   }
 
+  .editor a {
+    @apply text-blue-600 font-medium hover:underline;
+  }
+
   .editor ol {
     @apply space-y-2;
   }

@@ -132,7 +132,13 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
         <div className='flex bg-background space-x-5 p-5'>
           {/* PHOTOS */}
           <div className='w-1/3 space-y-2'>
-            <Image width={400} height={400} src={activePhoto} alt={product.name} />
+            <Image
+              width={400}
+              height={400}
+              src={activePhoto}
+              alt={product.name}
+              className='rounded-md aspect-square object-cover'
+            />
             <Carousel className='w-full'>
               <CarouselContent className='-ml-2'>
                 {product.photos.map((photo) => (
@@ -148,7 +154,7 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
                         width={100}
                         height={100}
                         src={photo.url}
-                        className='w-full object-cover rounded-md'
+                        className='w-full object-cover aspect-square rounded-md'
                         alt=''
                       />
                     </div>
@@ -212,7 +218,13 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
               </div>
               <span>Giao tận nơi hoặc nhận tại cửa hàng</span>
             </Button>
-            <div className='whitespace-pre-line'>{product.shortDescription}</div>
+            {/* SHORT DESCRIPTION */}
+            <div
+              className='editor'
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(product.shortDescription)
+              }}
+            />
           </div>
         </div>
       ) : (

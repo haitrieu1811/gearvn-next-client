@@ -48,6 +48,7 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
   const [isOpenCreateProductCategoryDialog, setIsOpenCreateProductCategoryDialog] = React.useState<boolean>(false)
   const [isOpenCreateBrandDialog, setIsOpenCreateBrandDialog] = React.useState<boolean>(false)
   const [markdownDescription, setMarkdownDescription] = React.useState<string>('')
+  const [markdownShortDescription, setMarkdownShortDescription] = React.useState<string>('')
 
   const previewThumbnail = React.useMemo(
     () => (thumbnailFile ? URL.createObjectURL(thumbnailFile) : null),
@@ -130,13 +131,14 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
     } = product
     const { setValue } = form
     setValue('name', name)
-    setValue('shortDescription', shortDescription)
     setValue('orderNumber', String(orderNumber))
     setValue('originalPrice', String(originalPrice))
     setValue('priceAfterDiscount', String(priceAfterDiscount))
     setValue('status', String(status))
     setValue('productCategoryId', category._id)
     setValue('brandId', brand._id)
+    setValue('shortDescription', shortDescription)
+    setValue('description', description)
     setValue(
       'specifications',
       specifications?.map((item) => ({ key: item.key, value: item.value }))
@@ -144,6 +146,7 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
 
     setPhotoIds(photos.map((photo) => photo._id))
     setMarkdownDescription(htmlToMarkdown(description))
+    setMarkdownShortDescription(htmlToMarkdown(shortDescription))
   }, [form, product])
 
   // UPDATE FORM DATA (UPDATE MODE)
@@ -371,20 +374,16 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
                     )}
                   />
                   {/* SHORT DESCRIPTION */}
-                  <FormField
-                    control={form.control}
-                    name='shortDescription'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Mô tả ngắn sản phẩm</FormLabel>
-                        <FormControl>
-                          <Textarea rows={5} {...field} />
-                        </FormControl>
-                        <FormDescription>Mô tả ngắn gọn về sản phẩm.</FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className='space-y-2'>
+                    <Label>Mô tả ngắn sản phẩm</Label>
+                    <Editor
+                      value={markdownShortDescription}
+                      onChange={({ html, text }) => {
+                        form.setValue('shortDescription', html)
+                        !!text && setMarkdownShortDescription(text)
+                      }}
+                    />
+                  </div>
                   {/* DESCRIPTION */}
                   <div className='space-y-2'>
                     <Label>Mô tả sản phẩm</Label>
