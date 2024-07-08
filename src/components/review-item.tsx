@@ -32,7 +32,7 @@ export default function ReviewItem({ reviewData }: ReviewItemProps) {
   const [replyContent, setReplyContent] = React.useState<string>('')
 
   const getRepliesOfReviewQuery = useQuery({
-    queryKey: ['getRepliesOfReview'],
+    queryKey: ['getRepliesOfReview', reviewData._id],
     queryFn: () => reviewsApis.getRepliesOfReview({ reviewId: reviewData._id })
   })
 
@@ -149,17 +149,16 @@ export default function ReviewItem({ reviewData }: ReviewItemProps) {
           {isReplying && (
             <form className='space-y-2' onSubmit={handleReplyReview}>
               <Input
-                autoFocus
                 type='text'
                 value={replyContent}
                 placeholder='Nhập phản hồi'
                 onChange={(e) => setReplyContent(e.target.value)}
               />
               <div className='flex justify-end space-x-2'>
-                <Button size='sm' variant='outline' onClick={handleCancelReply}>
+                <Button type='button' size='sm' variant='outline' onClick={handleCancelReply}>
                   Hủy
                 </Button>
-                <Button disabled={replyReviewMutation.isPending} size='sm'>
+                <Button type='submit' disabled={replyReviewMutation.isPending} size='sm'>
                   {replyReviewMutation.isPending && <Loader2 size={14} className='mr-2 animate-spin' />}
                   Phản hồi
                 </Button>
