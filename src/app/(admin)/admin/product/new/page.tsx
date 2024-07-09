@@ -1,7 +1,5 @@
-import React from 'react'
-
-import CreateProductForm from '@/app/(admin)/_components/create-product-form'
+import AdminProductNew from '@/app/(admin)/admin/product/new/product-new'
 
 export default function AdminProductNewPage() {
-  return <CreateProductForm />
+  return <AdminProductNew />
 }

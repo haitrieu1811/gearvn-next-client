@@ -34,6 +34,7 @@ import useAddProductToCart from '@/hooks/useAddProductToCart'
 import useIsClient from '@/hooks/useIsClient'
 import usePosts from '@/hooks/usePosts'
 import useProducts from '@/hooks/useProducts'
+import useReviewsByProductId from '@/hooks/useReviewsByProductId'
 import { cn, formatCurrency, rateSale } from '@/lib/utils'
 import { AppContext } from '@/providers/app.provider'
 
@@ -85,18 +86,9 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
     categoryId: product?.category._id,
     limit: '5'
   })
-  const { posts, getPublicPostsQuery } = usePosts({ limit: '5' })
   const isClient = useIsClient()
-
-  const getReviewsByProductIdQuery = useQuery({
-    queryKey: ['getReviewsByProductId', productId],
-    queryFn: () => reviewsApis.getReviewsByProductId({ productId })
-  })
-
-  const reviews = React.useMemo(
-    () => getReviewsByProductIdQuery.data?.data.data.reviews || [],
-    [getReviewsByProductIdQuery.data?.data.data.reviews]
-  )
+  const { posts, getPublicPostsQuery } = usePosts({ limit: '5' })
+  const { getReviewsByProductIdQuery, reviews } = useReviewsByProductId({ productId })
 
   const isReviewd = !!(loggedUser && reviews.map((review) => review.author._id).includes(loggedUser._id))
 

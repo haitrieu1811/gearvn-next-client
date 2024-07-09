@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ChevronLeft, Loader2, PlusCircle, Trash2, Upload } from 'lucide-react'
 import moment from 'moment'
 import Image from 'next/image'
@@ -29,18 +29,19 @@ import useAllProductCategories from '@/hooks/useAllProductCategories'
 import useUploadImage from '@/hooks/useUploadImage'
 import { convertMomentToVietnamese, htmlToMarkdown } from '@/lib/utils'
 import { CreateProductSchema, createProductSchema } from '@/rules/products.rules'
-import { CreateProductReqBody } from '@/types/products.types'
+import { CreateProductReqBody, ProductItem } from '@/types/products.types'
 import Editor from '@/components/editor'
 import { Label } from '@/components/ui/label'
 
 type CreateProductFormProps = {
-  productId?: string
+  productData?: ProductItem
 }
 
-export default function CreateProductForm({ productId }: CreateProductFormProps) {
+export default function CreateProductForm({ productData }: CreateProductFormProps) {
   const router = useRouter()
+  const queryClient = useQueryClient()
 
-  const isUpdateMode = !!productId
+  const isUpdateMode = !!productData
 
   const [thumbnailFile, setThumbnailFile] = React.useState<File | null>(null)
   const [photoFiles, setPhotoFiles] = React.useState<File[]>([])
@@ -82,17 +83,6 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
   const { allBrands } = useAllBrands()
   const { uploadImageMutation } = useUploadImage()
 
-  const getProductForUpdateQuery = useQuery({
-    queryKey: ['getProductForUpdate', productId],
-    queryFn: () => productsApis.getProductForUpdate(productId as string),
-    enabled: !!productId
-  })
-
-  const product = React.useMemo(
-    () => getProductForUpdateQuery.data?.data.data.product,
-    [getProductForUpdateQuery.data?.data.data.product]
-  )
-
   const form = useForm<CreateProductSchema>({
     resolver: zodResolver(createProductSchema),
     defaultValues: {
@@ -115,7 +105,7 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
   })
 
   const handleFillDataIntoTheForm = React.useCallback(() => {
-    if (!product) return
+    if (!productData) return
     const {
       name,
       shortDescription,
@@ -128,7 +118,7 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
       brand,
       photos,
       specifications
-    } = product
+    } = productData
     const { setValue } = form
     setValue('name', name)
     setValue('orderNumber', String(orderNumber))
@@ -147,7 +137,7 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
     setPhotoIds(photos.map((photo) => photo._id))
     setMarkdownDescription(htmlToMarkdown(description))
     setMarkdownShortDescription(htmlToMarkdown(shortDescription))
-  }, [form, product])
+  }, [form, productData])
 
   // UPDATE FORM DATA (UPDATE MODE)
   React.useEffect(() => {
@@ -177,7 +167,7 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
     mutationFn: productsApis.updateProduct,
     onSuccess: (data) => {
       toast.success(data.data.message)
-      getProductForUpdateQuery.refetch()
+      queryClient.invalidateQueries({ queryKey: ['getProductForUpdate', productData?._id] })
       setThumbnailFile(null)
       setPhotoFiles([])
     }
@@ -199,7 +189,7 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
 
   const handleSubmit = form.handleSubmit(async (data) => {
     if (!isUpdateMode && (!thumbnailFile || photoFiles.length === 0)) return // REQUIRED WHEN CREATE MODE
-    let thumbnailId = product?.thumbnail._id || ''
+    let thumbnailId = productData?.thumbnail._id || ''
     let photoIdsConfig: string[] = photoIds
     if (thumbnailFile) {
       const form = new FormData()
@@ -229,23 +219,14 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
       createProductMutation.mutate(body)
       return
     }
-    updateProductMutation.mutate({ body, productId })
+    updateProductMutation.mutate({ body, productId: productData._id })
   })
 
   return (
     <React.Fragment>
       <Form {...form}>
         <form onSubmit={handleSubmit}>
-          <div className='flex items-center space-x-3'>
-            <Button type='button' size='icon' variant='outline' className='w-8 h-8' onClick={() => router.back()}>
-              <ChevronLeft size={16} />
-            </Button>
-            <div className='flex items-center space-x-3'>
-              <h1 className='text-xl tracking-tight font-semibold'>{!product ? 'Tạo sản phẩm mới' : product.name}</h1>
-              {product && approvalStatuses[product.approvalStatus]}
-            </div>
-          </div>
-          <div className='grid grid-cols-12 gap-5 mt-10'>
+          <div className='grid grid-cols-12 gap-5'>
             <div className='col-span-3'>
               {/* THUMBNAIL AND PHOTO */}
               <Card>
@@ -254,7 +235,7 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
                 </CardHeader>
                 <CardContent className='grid gap-2'>
                   {/* THUMBNAIL IS NOT UPLOADED */}
-                  {!previewThumbnail && !product?.thumbnail && (
+                  {!previewThumbnail && !productData?.thumbnail && (
                     <InputFile onChange={(files) => handleChangeThumbnail(files)}>
                       <div className='aspect-square bg-muted rounded-lg flex justify-center items-center hover:cursor-pointer'>
                         <Upload size={40} strokeWidth={1.5} />
@@ -262,13 +243,13 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
                     </InputFile>
                   )}
                   {/* THUMBNAIL IS UPLOADED */}
-                  {(!!previewThumbnail || !!product?.thumbnail) && (
+                  {(!!previewThumbnail || !!productData?.thumbnail) && (
                     <div className='relative'>
                       <Image
                         width={200}
                         height={200}
-                        src={previewThumbnail || product?.thumbnail.url || ''}
-                        alt={product?.name || ''}
+                        src={previewThumbnail || productData?.thumbnail.url || ''}
+                        alt={productData?.name || ''}
                         className='w-full h-full aspect-square rounded-lg object-cover'
                       />
                       <div className='absolute inset-x-0 bottom-0 bg-muted/50 p-2 flex justify-end rounded-b-lg'>
@@ -289,35 +270,36 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
                   {/* PHOTOS */}
                   <div className='grid gap-2 grid-cols-12'>
                     {/* PHOTOS UPLOADED */}
-                    {[...(product?.photos || []).filter((photo) => photoIds.includes(photo._id)), ...previewPhotos].map(
-                      (photo, index) => {
-                        const isPreview = typeof photo === 'string'
-                        return (
-                          <div key={index} className='col-span-4 relative group'>
-                            <Image
-                              width={100}
-                              height={100}
-                              src={isPreview ? photo : photo.url}
-                              alt={isPreview ? '' : product?.name || ''}
-                              className='w-full aspect-square object-cover rounded-lg'
-                            />
-                            <div className='absolute inset-x-0 bottom-0 bg-muted/50 p-1 flex justify-end opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto'>
-                              <Button
-                                type='button'
-                                size='icon'
-                                variant='destructive'
-                                className='w-7 h-7'
-                                onClick={() =>
-                                  isPreview ? handleDeletePreviewPhoto(photo) : handleDeletePhoto(photo._id)
-                                }
-                              >
-                                <Trash2 size={16} strokeWidth={1.5} />
-                              </Button>
-                            </div>
+                    {[
+                      ...(productData?.photos || []).filter((photo) => photoIds.includes(photo._id)),
+                      ...previewPhotos
+                    ].map((photo, index) => {
+                      const isPreview = typeof photo === 'string'
+                      return (
+                        <div key={index} className='col-span-4 relative group'>
+                          <Image
+                            width={100}
+                            height={100}
+                            src={isPreview ? photo : photo.url}
+                            alt={isPreview ? '' : productData?.name || ''}
+                            className='w-full aspect-square object-cover rounded-lg'
+                          />
+                          <div className='absolute inset-x-0 bottom-0 bg-muted/50 p-1 flex justify-end opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto'>
+                            <Button
+                              type='button'
+                              size='icon'
+                              variant='destructive'
+                              className='w-7 h-7'
+                              onClick={() =>
+                                isPreview ? handleDeletePreviewPhoto(photo) : handleDeletePhoto(photo._id)
+                              }
+                            >
+                              <Trash2 size={16} strokeWidth={1.5} />
+                            </Button>
                           </div>
-                        )
-                      }
-                    )}
+                        </div>
+                      )
+                    })}
                     {/* UPLOAD PHOTOS */}
                     <div className='col-span-4'>
                       <InputFile multiple onChange={(files) => handleMergePhotos(files)}>
@@ -635,7 +617,7 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
                   </CardContent>
                 </Card>
                 {/* OTHER INFOS */}
-                {product && (
+                {productData && (
                   <Card>
                     <CardHeader>
                       <CardTitle>Thông tin khác</CardTitle>
@@ -644,29 +626,29 @@ export default function CreateProductForm({ productId }: CreateProductFormProps)
                       <div className='space-y-2'>
                         <div>Tạo lúc:</div>
                         <div>
-                          {moment(product.createdAt).format('DD-MM-YYYY')} (
-                          {convertMomentToVietnamese(moment(product.createdAt).fromNow())})
+                          {moment(productData.createdAt).format('DD-MM-YYYY')} (
+                          {convertMomentToVietnamese(moment(productData.createdAt).fromNow())})
                         </div>
                       </div>
                       <div className='space-y-2'>
                         <div>Cập nhật lúc:</div>
                         <div>
-                          {moment(product.updatedAt).format('DD-MM-YYYY')} (
-                          {convertMomentToVietnamese(moment(product.updatedAt).fromNow())})
+                          {moment(productData.updatedAt).format('DD-MM-YYYY')} (
+                          {convertMomentToVietnamese(moment(productData.updatedAt).fromNow())})
                         </div>
                       </div>
                       <div className='space-y-2'>
                         <div>Tác giả:</div>
                         <div className='flex items-center space-x-2'>
                           <Avatar>
-                            <AvatarImage src={product.author.avatar} />
+                            <AvatarImage src={productData.author.avatar} />
                             <AvatarFallback>
-                              {product.author.fullName[0].toUpperCase()}
-                              {product.author.fullName[1].toUpperCase()}
+                              {productData.author.fullName[0].toUpperCase()}
+                              {productData.author.fullName[1].toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
                           <div>
-                            {product.author.email} ({product.author.fullName})
+                            {productData.author.email} ({productData.author.fullName})
                           </div>
                         </div>
                       </div>

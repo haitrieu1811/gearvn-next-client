@@ -1,4 +1,4 @@
-import CreateProductForm from '@/app/(admin)/_components/create-product-form'
+import ProductDetail from '@/app/(admin)/admin/product/[id]/product-detail'
 
 type AdminProductUpdatePageProps = {
   params: {
@@ -8,5 +8,5 @@ type AdminProductUpdatePageProps = {
 
 export default function AdminProductUpdatePage({ params }: AdminProductUpdatePageProps) {
   const { id } = params
-  return <CreateProductForm productId={id} />
+  return <ProductDetail productId={id} />
 }
