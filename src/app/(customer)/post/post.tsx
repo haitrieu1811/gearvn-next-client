@@ -13,7 +13,7 @@ export default function Post() {
   const { posts, pagination } = usePosts({ page })
   return (
     <div className='py-5'>
-      <div className='max-w-6xl mx-auto'>
+      <div className='container'>
         <Card>
           <CardHeader className='flex-row justify-center'>
             <CardTitle className='text-2xl'>Tất cả bài viết</CardTitle>

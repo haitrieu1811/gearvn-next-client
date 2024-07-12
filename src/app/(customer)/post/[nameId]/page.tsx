@@ -53,7 +53,7 @@ export default async function PostDetailPage({ params }: PostDetailProps) {
 
   return (
     <div className='py-5'>
-      <div className='max-w-6xl mx-auto grid gap-5'>
+      <div className='container grid gap-5'>
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -87,7 +87,7 @@ export default async function PostDetailPage({ params }: PostDetailProps) {
           </CardHeader>
           <CardContent>
             <div
-              className='editor'
+              className='editor text-justify'
               dangerouslySetInnerHTML={{
                 __html: post?.content || ''
               }}

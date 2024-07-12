@@ -48,7 +48,7 @@ export default function Product() {
 
   return (
     <div className='py-5'>
-      <div className='max-w-6xl mx-auto'>
+      <div className='container'>
         <Card>
           <CardHeader className='flex-row justify-center'>
             {!isSearchMode && (

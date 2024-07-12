@@ -18,8 +18,8 @@ export default function ProductItem({ productData }: ProductItemProps) {
     <div className='border rounded-md'>
       <Link href={detailLink} title={name}>
         <Image
-          width={200}
-          height={200}
+          width={500}
+          height={500}
           src={thumbnail.url}
           alt={name}
           className='w-full aspect-square rounded-md object-cover'

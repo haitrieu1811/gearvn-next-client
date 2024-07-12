@@ -37,7 +37,7 @@ export default async function HomePage() {
 
   return (
     <div className='pt-2.5 pb-5'>
-      <div className='max-w-6xl mx-auto space-y-5'>
+      <div className='container space-y-5'>
         {/* CAROUSELS AND BANNERS */}
         <div className='grid grid-cols-10 gap-2.5'>
           <div className='col-span-2'>

@@ -93,7 +93,7 @@ export default function CustomerHeader() {
     <React.Fragment>
       {/* HEADER */}
       <header className='bg-main sticky top-0 inset-x-0 z-10'>
-        <div className='max-w-6xl mx-auto py-4 flex justify-between items-center space-x-5'>
+        <div className='container py-4 flex justify-between items-center space-x-5'>
           {/* LOGO */}
           <Link href={PATH.HOME}>
             <Image priority width={140} height={140} src={'/white-logo.svg'} alt='Logo' />
@@ -213,7 +213,7 @@ export default function CustomerHeader() {
       </header>
       {/* SUBMENU */}
       <div className='bg-background shadow-sm'>
-        <div className='flex max-w-6xl mx-auto'>
+        <div className='flex container'>
           {subMenuItems.map((item, index) => (
             <Link
               key={index}

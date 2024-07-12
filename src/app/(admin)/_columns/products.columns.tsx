@@ -66,7 +66,7 @@ export const columns: ColumnDef<ProductItem>[] = [
   },
   {
     accessorKey: 'thumbnail',
-    header: () => <div className='text-xs to-muted-foreground'>Hình đại diện</div>,
+    header: () => '',
     cell: ({ row }) => (
       <Image
         width={100}
@@ -81,7 +81,7 @@ export const columns: ColumnDef<ProductItem>[] = [
   },
   {
     accessorKey: 'name',
-    header: ({ column }) => <DataTableColumnHeader column={column} title='Sản phẩm' />
+    header: ({ column }) => <DataTableColumnHeader column={column} title='Tên sản phẩm' />
   },
   {
     accessorKey: 'priceAfterDiscount',

@@ -8,7 +8,7 @@ import AccountProvider from '@/providers/account.provider'
 export default function AccountLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <AccountProvider>
-      <div className='flex space-x-5 max-w-6xl mx-auto py-5'>
+      <div className='flex space-x-5 container py-5'>
         <aside className='w-[300px]'>
           <SidebarAccount />
         </aside>

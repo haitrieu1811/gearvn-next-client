@@ -32,7 +32,7 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
     [getProductForUpdateQuery.data?.data.data.product]
   )
 
-  const { reviews } = useReviewsByProductId({ productId })
+  const { reviews, totalReview } = useReviewsByProductId({ productId })
 
   return (
     <div className='space-y-5'>
@@ -56,9 +56,8 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
         <TabsContent value='review' className='pt-5'>
           <Card>
             <CardContent>
-              {reviews.map((review) => (
-                <ReviewItem key={review._id} reviewData={review} />
-              ))}
+              {totalReview > 0 && reviews.map((review) => <ReviewItem key={review._id} reviewData={review} />)}
+              {totalReview === 0 && <div className='pt-5 text-sm'>Sản phẩm chưa có đánh giá nào.</div>}
             </CardContent>
           </Card>
         </TabsContent>

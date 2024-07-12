@@ -45,7 +45,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
   return (
     <div className='py-5'>
-      <div className='max-w-6xl mx-auto grid gap-5'>
+      <div className='container grid gap-5'>
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
