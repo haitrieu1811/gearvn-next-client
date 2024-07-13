@@ -1,8 +1,9 @@
 'use client'
 
 import Tippy from '@tippyjs/react/headless'
-import { Menu } from 'lucide-react'
+import { ChevronLeft, Menu } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 import AdminSidebar from '@/app/(admin)/_components/sidebar'
@@ -16,6 +17,8 @@ import useIsClient from '@/hooks/useIsClient'
 import { AppContext } from '@/providers/app.provider'
 
 export default function AdminHeader() {
+  const router = useRouter()
+
   const { loggedUser } = React.useContext(AppContext)
 
   const isClient = useIsClient()
@@ -32,8 +35,8 @@ export default function AdminHeader() {
   ])
 
   return (
-    <header className='flex justify-between items-center px-4 py-2 bg-background'>
-      <div className='flex items-center space-x-5'>
+    <header className='flex justify-between items-center px-4 py-2 bg-background sticky top-0 inset-x-0 z-10'>
+      <div className='flex lg:hidden items-center space-x-5'>
         <Sheet>
           <SheetTrigger asChild>
             <Button size='icon' variant='outline' className='lg:hidden'>
@@ -48,6 +51,12 @@ export default function AdminHeader() {
           <span className='text-xl font-bold tracking-tight'>Gearvn</span>
           <span className='text-xs text-muted-foreground tracking-tight uppercase'>Admin</span>
         </Link>
+      </div>
+      <div>
+        <Button variant='ghost' size='sm' className='uppercase tracking-tight' onClick={() => router.back()}>
+          <ChevronLeft size={18} strokeWidth={1.5} className='mr-1' />
+          Quay lại
+        </Button>
       </div>
       <div className='flex items-center space-x-10'>
         <ModeToggle />
@@ -77,10 +86,13 @@ export default function AdminHeader() {
               </PopoverWrapper>
             )}
           >
-            <Avatar>
-              <AvatarImage src={loggedUser.avatar && loggedUser.avatar.url} alt={loggedUser.fullName} />
-              <AvatarFallback>{`${loggedUser.fullName[0].toUpperCase()}${loggedUser.fullName[1].toUpperCase()}`}</AvatarFallback>
-            </Avatar>
+            <div className='flex items-center space-x-2'>
+              <Avatar className='w-8 h-8'>
+                <AvatarImage src={loggedUser.avatar && loggedUser.avatar.url} alt={loggedUser.fullName} />
+                <AvatarFallback>{`${loggedUser.fullName[0].toUpperCase()}${loggedUser.fullName[1].toUpperCase()}`}</AvatarFallback>
+              </Avatar>
+              <span className='text-sm text-muted-foreground'>{loggedUser.fullName}</span>
+            </div>
           </Tippy>
         )}
       </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { CheckCircle, Loader, Loader2, NotepadText, PackageCheck, Truck, XCircle } from 'lucide-react'
 import React from 'react'
 import { toast } from 'sonner'
@@ -24,6 +24,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { OrderStatus } from '@/constants/enum'
+import useAllOrders from '@/hooks/useAllOrders'
 import useOrder from '@/hooks/useOrder'
 
 type AdminOrderContext = {
@@ -65,23 +66,7 @@ export default function AdminOrder() {
   const [currentViewingOrderId, setCurrentViewingOrderId] = React.useState<string | null>(null)
   const [currentDeletingOrderId, setCurrentDeletingOrderId] = React.useState<string | null>(null)
 
-  const getAllOrdersQuery = useQuery({
-    queryKey: ['getAllOrders'],
-    queryFn: () => ordersApis.getAllOrders()
-  })
-
-  const orders = React.useMemo(
-    () => getAllOrdersQuery.data?.data.data.orders || [],
-    [getAllOrdersQuery.data?.data.data.orders]
-  )
-  const analytics = React.useMemo(
-    () => getAllOrdersQuery.data?.data.data.analytics,
-    [getAllOrdersQuery.data?.data.data.analytics]
-  )
-  const totalOrder = React.useMemo(
-    () => getAllOrdersQuery.data?.data.data.pagination.totalRows || 0,
-    [getAllOrdersQuery.data?.data.data.pagination.totalRows]
-  )
+  const { getAllOrdersQuery, orders, analytics, totalOrder } = useAllOrders()
 
   const analyticCards = React.useMemo(
     () => [
