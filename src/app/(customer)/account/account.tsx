@@ -17,7 +17,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Gender, UserVerifyStatus } from '@/constants/enum'
-import isAuth from '@/hocs/isAuth'
 import useIsClient from '@/hooks/useIsClient'
 import useUploadImage from '@/hooks/useUploadImage'
 import { handleErrorsFromServer } from '@/lib/utils'
@@ -25,7 +24,7 @@ import { AccountContext } from '@/providers/account.provider'
 import { AppContext } from '@/providers/app.provider'
 import { UpdateMeSchema, updateMeSchema } from '@/rules/users.rules'
 
-export default isAuth(function Account() {
+export default function Account() {
   const { isAuthenticated, setLoggedUser } = React.useContext(AppContext)
   const { avatarFile, setAvatarFile } = React.useContext(AccountContext)
 
@@ -231,4 +230,4 @@ export default isAuth(function Account() {
       </CardContent>
     </Card>
   )
-})
+}

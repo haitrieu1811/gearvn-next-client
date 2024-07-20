@@ -9,11 +9,10 @@ import cartApis from '@/apis/cart.apis'
 import CartItem from '@/components/cart-item'
 import { Button } from '@/components/ui/button'
 import PATH from '@/constants/path'
-import isAuth from '@/hocs/isAuth'
 import { formatCurrency } from '@/lib/utils'
 import { CartContext } from '@/providers/cart.provider'
 
-export default isAuth(function Cart() {
+export default function Cart() {
   const queryClient = useQueryClient()
 
   const { cartItems, totalAmount, totalItems } = React.useContext(CartContext)
@@ -98,4 +97,4 @@ export default isAuth(function Cart() {
       )}
     </React.Fragment>
   )
-})
+}

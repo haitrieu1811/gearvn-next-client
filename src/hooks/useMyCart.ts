@@ -10,7 +10,7 @@ export default function useMyCart() {
   const { isAuthenticated } = React.useContext(AppContext)
 
   const getMyCartQuery = useQuery({
-    queryKey: ['getMyCart'],
+    queryKey: ['getMyCart', isAuthenticated],
     queryFn: () => cartApis.getMyCart(),
     enabled: isAuthenticated
   })

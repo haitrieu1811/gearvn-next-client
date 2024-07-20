@@ -263,8 +263,8 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
                   }}
                 />
                 <div
-                  className={cn('inset-x-0 bottom-0 flex justify-center py-5 bg-white', {
-                    'absolute before:absolute before:bottom-full before:inset-x-0 before:h-[200%] before:bg-gradient-to-b before:from-white/0 before:via-white/40 before:via-5% before:to-white':
+                  className={cn('inset-x-0 bottom-0 flex justify-center py-5 bg-background', {
+                    'absolute before:absolute before:bottom-full before:inset-x-0 before:h-[200%] before:bg-gradient-to-b before:from-background/0 before:via-background/40 before:via-5% before:to-background':
                       !isViewingMore,
                     relative: isViewingMore
                   })}

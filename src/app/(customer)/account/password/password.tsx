@@ -11,11 +11,10 @@ import InputPassword from '@/components/input-password'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
-import isAuth from '@/hocs/isAuth'
 import { handleErrorsFromServer } from '@/lib/utils'
 import { ChangePasswordSchema, changePasswordSchema } from '@/rules/users.rules'
 
-export default isAuth(function AccountPassword() {
+export default function AccountPassword() {
   const form = useForm<ChangePasswordSchema>({
     resolver: zodResolver(changePasswordSchema),
     defaultValues: {
@@ -119,4 +118,4 @@ export default isAuth(function AccountPassword() {
       </CardContent>
     </Card>
   )
-})
+}

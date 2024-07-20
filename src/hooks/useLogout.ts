@@ -14,10 +14,14 @@ export default function useLogout() {
   const logoutMutation = useMutation({
     mutationKey: ['logout'],
     mutationFn: usersApis.logout,
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       toast.success(data.data.message)
       setIsAuthenticated(false)
       setLoggedUser(null)
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        body: JSON.stringify({})
+      })
     }
   })
 

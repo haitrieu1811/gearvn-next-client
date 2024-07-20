@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Public_Sans as FontSans } from 'next/font/google'
+import { Be_Vietnam_Pro as FontSans } from 'next/font/google'
 import NextTopLoader from 'nextjs-toploader'
 
 import { Toaster } from '@/components/ui/sonner'
@@ -35,7 +35,7 @@ export default function RootLayout({
               <CartProvider>
                 <NextTopLoader showSpinner={false} color='yellow' height={2} />
                 {children}
-                <Toaster richColors position='bottom-left' />
+                <Toaster richColors position='top-center' />
               </CartProvider>
             </AppProvider>
           </TanstackProvider>

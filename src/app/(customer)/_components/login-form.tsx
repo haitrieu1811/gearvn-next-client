@@ -14,7 +14,6 @@ import { Input } from '@/components/ui/input'
 import { handleErrorsFromServer } from '@/lib/utils'
 import { AppContext } from '@/providers/app.provider'
 import { LoginSchema, loginSchema } from '@/rules/users.rules'
-import { LoginReqBody } from '@/types/users.types'
 import { AuthResponse } from '@/types/utils.types'
 
 type LoginFormProps = {
@@ -35,12 +34,16 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
   const loginMutation = useMutation({
     mutationKey: ['login'],
     mutationFn: usersApis.login,
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       const { user } = data.data.data
       setIsAuthenticated(true)
       setLoggedUser(user)
       toast.success(data.data.message)
       onSuccess && onSuccess(data)
+      await fetch('/api/auth/set-cookie', {
+        method: 'POST',
+        body: JSON.stringify({ accessToken: data.data.data.accessToken })
+      })
     },
     onError: (errors) => {
       handleErrorsFromServer({ form, errors })
@@ -48,8 +51,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
   })
 
   const handleSubmit = form.handleSubmit((data) => {
-    const body: LoginReqBody = data
-    loginMutation.mutate(body)
+    loginMutation.mutate(data)
   })
 
   return (

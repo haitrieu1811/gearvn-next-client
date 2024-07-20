@@ -1,11 +1,11 @@
 'use client'
 
+import { redirect } from 'next/navigation'
 import React from 'react'
 
 import PATH from '@/constants/path'
 import useIsClient from '@/hooks/useIsClient'
 import { AppContext } from '@/providers/app.provider'
-import { redirect } from 'next/navigation'
 
 export default function isAuth(Component: any) {
   return function IsAuth(props: any) {
